@@ -1,0 +1,40 @@
+const pi = 3.14;
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+function draw(x,y){
+  x+=150;
+  y+=150;
+ctx.moveTo(x, y);
+ctx.lineTo(x+1, y);
+ctx.lineTo(x+1, y+1);
+ctx.lineTo(x, y+1);
+ctx.stroke();
+}
+var radius = document.getElementById("radius");
+var theta = document.getElementById("theta");
+function compare(frequency, compare){
+  var i = 0;
+  ctx.clearRect(0, 0, c.width, c.height);
+  var wave = [];
+  // generates a wave array for the transformed signal
+while(i<100){
+i += 0.03;
+draw(Math.cos(i*compare)*((Math.sin(i*frequency)+1)/2)*100, Math.sin(i*compare)*((Math.sin(i*frequency)+1)/2)*100)
+}
+  i = 0;
+  var sum = 0;
+  while(i < wave.length){
+    sum += wave[i]
+    i++
+  }
+  sum /= wave.length;
+  return sum;
+}
+function transform(){
+  var i = -10;
+  while(i<10){
+  draw(i*10, 100*compare(10,i))
+    i += 0.01;
+  }
+}
+compare(3,3);
