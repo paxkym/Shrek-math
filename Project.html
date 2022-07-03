@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <ul id = 'functions'>
+          <li><button onclick = 'createTab(false);'>+</button></li>
+      <li><button onclick = 'delet()' id ='tab'>Delete</button></li>
+</ul>
+    <ul id = 'files'>
+      <li><button onclick = 'createTab(true);'>+</button></li>
+  <li><button onclick = 'delet()' id ='tab'>Delete</button></li>
+</ul>
+    <div id = 'line'></div>
+      <div id = 'line2'></div>
+  <div id = 'filer' position="absolute">
+
+  </div>
+            <div id = 'functionpicker' position="absolute">
+<textarea id = "name2">myFile</textarea>
+           <select id="functionType">
+  <option value="0">Hartley transform</option>
+  <option value="1">Fourier transform</option>
+  <option value="3">Mellin transform</option>
+  <option value="2">Gamma function</option>
+  <option value="4">Zeta function</option>
+               <option value="5">Custom waveform</option>
+               <option value="6">Melllin transform</option>
+               <option value="7">Melllin transform</option>
+               <option value="8">Melllin transform</option>
+</select>
+        <button onclick="create2();">Create</button>
+        </div>
+        <canvas id="inwave" width="1040" height="156" style="border:1px solid #000000;"></canvas>
+      <div id = 'filepicker' position="absolute">
+            <input type="file" id="fileInput"></input>
+<textarea id = "name">myFile</textarea>
+        <button onclick="create();">Create</button>
+  </div>
+      <canvas id="outwave" width="1040" height="156" style="border:1px solid #000000;"></canvas>
+<textarea id="input" rows="1" cols="10">
+0
+</textarea>
+<button onclick = "window.getFile();">
+load file
+</button>
+  <button onclick = "window.write();">
+write file
+</button>
+      <script src="script.js"></script>
+</body>
+
+</html>
