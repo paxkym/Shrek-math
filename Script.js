@@ -1083,6 +1083,17 @@ const out = new Int8Array(result.slice(404))
       reader.readAsArrayBuffer(fil.files[0])
       return(global2)
 }
+function defaul(tab, type, value){
+if(type == 0){
+  if(tabs[tab][5][1] == value){
+    return 'selected';
+  }
+}
+  if(type == 1){
+    console.log(tabs[tab][5][0])
+    return(tabs[tab][5][0])
+  }
+}
 function hartley(wave){
   var i = 0;
   var i2 = 0;
@@ -1214,7 +1225,7 @@ let list = document.getElementById("files").innerHTML;
 function create2(){
            const name = document.getElementById('name2').value;
     console.log(name)
-   tabs.push([true,false,name,document.getElementById('functionType').value,document.getElementById('input').value,[0,0,0,0,0,0]]);
+   tabs.push([true,false,name,document.getElementById('functionType').value,document.getElementById('input').value,[1,0,0,0,0,0]]);
 let list = document.getElementById("functions").innerHTML;
   list+="<li><button onclick = 'tab("+ (tabs.length - 1) +")' id ='tab'>"+name+"</button></li>";
     document.getElementById("functions").innerHTML = list;
@@ -1222,21 +1233,120 @@ let list = document.getElementById("functions").innerHTML;
   link.style.visibility = 'hidden';
 }
 function customWave(tab){
-const freq = tabs[tab][0];
-const type = tabs[tab][1];
+const freq = tabs[tab][5][0];
+const type = tabs[tab][5][1];
 const peak = 10;
 var output =[];
+if(type == 0){
+  var i = 0;
+  var i2 = 0;
+  var up = true;
+  while(i<1000){
+if(i2>freq/2){
+  up = false;
+}else if(i2<0){
+  up = true;
+}
+if(up){
+  i2 += 1/freq;
+  output.push(0);
+}else if(!up){
+  i2 -= 1/freq;
+  output.push(peak);
+  }
+  i++
+}
+}
+if(type == 1){
+  var i = 0;
+  var i2 = 0;
+  var up = true;
+  while(i<1000){
+if(i2>freq/2){
+  up = false;
+}else if(i2<0){
+  up = true;
+}
+if(up){
+  i2 += 1/freq;
+}else if(!up){
+  i2 -= 1/freq;
+  }
+  output.push((i2/freq)*peak);
+  i++
+}
+}
 if(type == 2){
   var i = 0;
-  while(i<10000){
-if(i>freq){
-  i = 0;
+  var i2 = 0;
+  while(i<1000){
+if(i2>freq){
+  i2 = 0;
 }
-output.push((i/freq)*peak)
-i += 1/freq;
+output.push((i2/freq)*peak)
+i ++;
+i2 += 1/freq;
   }
-  console.log(output)
 }
+if(type == 3){
+  var i = 0;
+  var i2 = 0;
+  while(i<1000){
+if(i2>freq){
+  i2 = 0;
+}
+output.push(peak - ((i2/freq)*peak))
+i ++;
+i2 += 1/freq;
+  }
+  console.log('   gdsdsdds', output, type)
+}
+if(type == 4){
+  var i = 0;
+  var i2 = 0;
+  while(i<1000){
+    output.push(Math.sin(Math.PI * i2)*peak);
+    i++;
+    i2 += 1/freq;
+  }  
+}
+if(type == 5){
+  var i = 0;
+  while(i<1000){
+    output.push(i)
+    i++;
+  }
+
+}
+if(type == 6){
+  var i = 0;
+  var i2 = 0;
+  var randint = Math.random() * peak;
+  while(i<1000){
+    if(i2 == freq){
+      randint = Math.random() * peak;
+    i2 = 0;
+    }
+    output.push(randint)
+    i++;
+    i2++;
+  }
+}
+if(type == 7){
+  var i = 0;
+  var out = 0;
+  while(i<1000){
+out = Math.floor(Math.E**(i/freq));
+if(out != 'Infinity'){
+    output.push(out);
+}else{
+  break;
+}
+    i++;
+  }
+}
+console.log('   gdsdsdds', output)
+return output;
 }
 function close(){ 
   document.getElementById('filepicker').style.visibility = 'hidden';
@@ -1290,7 +1400,7 @@ tabfiles[global] = ['']
     const filer = document.getElementById("filer");
       if(tabs[numb][3] == 5){
         console.log('tabfiles:', tabfiles)
-        filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType"><option value="0">Square wave</option><option value="1">Triangle wave</option><option value="2">Rising edge sawtooth wave</option><option value="3">Falling edge sawtooth wave</option><option value="4">Sine wave</option><option value="5">Straight line</option><option value="6">Noise</option><option value="7">Exponential function</option></select><input type="range" min="1" max="100" value="10" id="waveFreq">');
+        filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Square wave</option><option value="1" ' + defaul(numb, 0, 1) + '>Triangle wave</option><option value="2" ' + defaul(numb, 0, 2) + '>Rising edge sawtooth wave</option><option value="3" ' + defaul(numb, 0, 3) + '>Falling edge sawtooth wave</option><option value="4" ' + defaul(numb, 0, 4) + '>Sine wave</option><option value="5" ' + defaul(numb, 0, 5) + '>Straight line</option><option value="6" ' + defaul(numb, 0, 6) + '>Noise</option><option value="7" ' + defaul(numb, 0, 7) + '>Exponential function</option></select><input type="range" min="1" max="100" value="' + defaul(numb, 1, 0) + '" id="waveFreq">');
         console.log('type', tabs[numb][3])
         document.getElementById('waveFreq').addEventListener('change', function(){
           var i = 0;
