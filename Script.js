@@ -7,6 +7,7 @@ const e = 2.71828;
 var global;
 var global3;
 var tabs = [];
+var picking = true;
   let global2;
 let filehandle;
 var c = document.getElementById("inwave");
@@ -1084,13 +1085,14 @@ const out = new Int8Array(result.slice(404))
       return(global2)
 }
 function defaul(tab, type, value){
+  console.log(tabs[tab][5][0])
 if(type == 0){
+  console.log(tabs[tab][5][0])
   if(tabs[tab][5][1] == value){
     return 'selected';
   }
 }
   if(type == 1){
-    console.log(tabs[tab][5][0])
     return(tabs[tab][5][0])
   }
 }
@@ -1179,16 +1181,18 @@ input.addEventListener('change', function (e) {
   ctx.clearRect(0, 0, c.width, c.height);
 global2 = (file2wave(input));
 }, false)
-document.getElementById('input').addEventListener('change', function(){
-  var i = 0;
-  while(i<tabs.length){
-    if(tabs[i][0]){
-      tabs[i][4] = parseInt(((document.getElementById('input').value).split("\n"))[0]);
-        console.log(i, tabs);
-      break;
-    }
-    i++
+document.getElementById('input').addEventListener('click', async function(){
+  document.getElementById('input').innerHTML = "Cancel"
+  if(picking == false){
+    document.getElementById('input').innerHTML = "Set input"
+    picking = true;
+    document.getElementById('tab').style.backgroundColor = '#B6B6B6';
+  }else{
+    picking = false;
+    document.getElementById('tab').style.backgroundColor = '#183985';
   }
+// get tab which input is coming from
+
 })
 async function write(){
   const writable = await filehandle.createWritable();
@@ -1225,7 +1229,7 @@ let list = document.getElementById("files").innerHTML;
 function create2(){
            const name = document.getElementById('name2').value;
     console.log(name)
-   tabs.push([true,false,name,document.getElementById('functionType').value,document.getElementById('input').value,[1,0,0,0,0,0]]);
+   tabs.push([true,false,name,document.getElementById('functionType').value,,[1,0,0,0,0,0]]);
 let list = document.getElementById("functions").innerHTML;
   list+="<li><button onclick = 'tab("+ (tabs.length - 1) +")' id ='tab'>"+name+"</button></li>";
     document.getElementById("functions").innerHTML = list;
@@ -1353,6 +1357,9 @@ function close(){
 document.getElementById('functionpicker').style.visibility = 'hidden';
 }
 function tab(numb){
+  // decides if picking or using tab
+
+  if(picking){
   ctx.fillRect(0, 0, 1040, 150);
     ctx2.fillRect(0, 0, 1040, 150);
   var i = 0;
@@ -1476,6 +1483,25 @@ filer.innerHTML = String('<input type="range" min="1" max="' + tabfiles[tabs[glo
 }
   }
   console.log(tabfiles)
+
+}else{
+  document.getElementById('tab').style.backgroundColor = '#B6B6B6';
+  var i = 0;
+  var opentab;
+  // find the tab which is open
+  while(i<tabs.length){
+    if(tabs[i][0]){
+      opentab = i;
+      break;
+    }
+    i++
+  }
+  // process the data
+
+  tabs[opentab][4] = numb;
+  picking = true;
+  document.getElementById('input').innerHTML = "Set input";
+}
 }
 function process(){
   tabfiles = [];
