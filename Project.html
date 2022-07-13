@@ -9,12 +9,12 @@
 </head>
 <body>
   <ul id = 'functions'>
-          <li><button onclick = 'createTab(false);'>+</button></li>
-      <li><button onclick = 'delet()' id ='tab'>Delete</button></li>
+          <li><button onclick = 'createTab(false);' aria-label="Add function">+</button></li>
+      <li><button onclick = 'delet()' id ='tab' aria-label="Delete function">Delete</button></li>
 </ul>
     <ul id = 'files'>
-      <li><button onclick = 'createTab(true);'>+</button></li>
-  <li><button onclick = 'delet()' id ='tab'>Delete</button></li>
+      <li><button onclick = 'createTab(true);' aria-label="Add file">+</button></li>
+  <li><button onclick = 'delet()' id ='tab' aria-label="Delete file">Delete</button></li>
 </ul>
     <div id = 'line'></div>
       <div id = 'line2'></div>
@@ -26,13 +26,15 @@
            <select id="functionType">
   <option value="0">Hartley transform</option>
   <option value="1">Fourier transform</option>
-  <option value="3">Mellin transform</option>
-  <option value="2">Gamma function</option>
-  <option value="4">Zeta function</option>
-               <option value="5">Custom waveform</option>
-               <option value="6">Melllin transform</option>
-               <option value="7">Melllin transform</option>
-               <option value="8">Melllin transform</option>
+  <option value="2">Mellin transform</option>
+  <option value="3">Custom waveform</option>
+  <option value="10">Constant</option>
+  <option value="4">Trigonometry</option>
+  <option value="5">Miscellaneous</option>
+  <option value="6">Calculus</option>
+  <option value="7">Arithmetic</option>
+  <option value="8">Transform</option>
+  <option value="9">Boolean logic</option>
 </select>
         <button onclick="create2();">Create</button>
         </div>
@@ -52,6 +54,7 @@ load file
   <button onclick = "window.write();">
 write file
 </button>
+<script src="Chartjs.js"></script>
       <script src="script.js"></script>
 </body>
 

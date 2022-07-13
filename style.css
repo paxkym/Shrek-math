@@ -45,13 +45,13 @@ html, body {
   }
   #input {
       position: relative;
-    right: 814px;
-    top: -1788px;
+    right: -230px;
+    top: -2030px;
   }
   #inwave {
         position: relative;
     right: -232px;
-    top: -1316px;
+    top: -1580px;
   }
   #outwave {
         position: relative;
@@ -75,5 +75,5 @@ html, body {
   #filer {
               position: relative;
     right: -332px;
-    top: -1385px;
+    top: -1685px;
   }
