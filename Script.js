@@ -2233,6 +2233,9 @@ while(i<wave.length){
   }
   return output;
 }
+function boolean(){
+
+}
 function trig(tab, file){
  const trigFunc = tabs[tab][5][1];
  if(trigFunc == 0){
@@ -2372,17 +2375,27 @@ async function createTab(type){
   if(type == true){
         const link = document.getElementById('filepicker');
   link.style.visibility = 'visible';
-        document.getElementById('name').textContent = 'myFile ' + (tabs.length + 1);
-            document.getElementById('name2').textContent = 'myFile ' + (tabs.length + 1);
+        document.getElementById('name').textContent = 'myTab ' + (tabs.length + 1);
+            document.getElementById('name2').textContent = 'myTab ' + (tabs.length + 1);
   }
   if(type == false){
             const link = document.getElementById('functionpicker');
   link.style.visibility = 'visible';
-        document.getElementById('name').textContent = 'myFile ' + (tabs.length);
+        document.getElementById('name2').textContent = 'myTab ' + (tabs.length+1);
   }
 }
 function create(){
            const name = document.getElementById('name').value;
+           var i = 0;
+           var tabnames = []
+           while(i<tabs.length){
+            tabnames.push(tabs[i][2])
+            i++
+           }
+            if(tabnames.includes(name)){
+              alert('Tabs cannot have identical names!')
+              return
+            }
     console.log(global2)
    tabs.push([true,true,name,0,'',global2]);
   
@@ -2396,6 +2409,16 @@ let list = document.getElementById("files").innerHTML;
 }
 function create2(){
            const name = document.getElementById('name2').value;
+           var i = 0;
+           var tabnames = []
+           while(i<tabs.length){
+            tabnames.push(tabs[i][2])
+            i++
+           }
+            if(tabnames.includes(name)){
+              alert('Tabs cannot have identical names!')
+              return
+            }
     console.log(name)
    tabs.push([true,false,name,document.getElementById('functionType').value,'0',[1,0,0,0,0,0]]);
 let list = document.getElementById("functions").innerHTML;
@@ -2635,6 +2658,17 @@ tabfiles[global] = ['']
     document.getElementById('setConst').addEventListener('change', function(){
             tabs[numb][5][0] = document.getElementById('setConst').value;
       })
+  }else if(tabs[numb][3] == 7){
+    filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><textarea id="in1" placeholder="tab name" rows="1" cols="16"></textarea><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>+</option><option value="1" ' + defaul(numb, 0, 1) + '>-</option><option value="2" ' + defaul(numb, 0, 2) + '>&times</option><option value="3" ' + defaul(numb, 0, 3) + '>&divide</option><option value="4" ' + defaul(numb, 0, 4) + '>^</option><option value="5" ' + defaul(numb, 0, 5) + '>&#8730</option><option value="6" ' + defaul(numb, 0, 6) + '>&#8731</option><option value="7" ' + defaul(numb, 0, 7) + '>root</option><option value="8" ' + defaul(numb, 0, 8) + '></select><textarea id="in2" placeholder="tab name" rows="1" cols="16"></textarea>');
+    document.getElementById('waveType').addEventListener('change', function(){
+            tabs[numb][5][1] = document.getElementById('waveType').value;
+      })
+      document.getElementById('in1').addEventListener('change', function(){
+        tabs[numb][5][2] = document.getElementById('in1').value;
+  })
+  document.getElementById('in2').addEventListener('change', function(){
+    tabs[numb][5][3] = document.getElementById('in2').value;
+})
   }else{  
 filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace">');
       }
@@ -2764,7 +2798,10 @@ if(!tabs[i][1]){
   }
   if(doneFunction == 10){
     tabfiles[i] = constfunc(i)
-    alert(constfunc(i))
+  }
+  if(doneFunction == 7){
+    tabfiles[i] = arith(i)
+    alert(arith(i))
   }
 }
    i++
