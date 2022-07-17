@@ -77,3 +77,8 @@ html, body {
     right: -332px;
     top: -1685px;
   }
+  label{
+    background-color:purple;
+    display:block;
+    width:200px;
+  }
