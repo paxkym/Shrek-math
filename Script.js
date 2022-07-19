@@ -2800,7 +2800,7 @@ tabfiles[global] = ['']
     tabs[numb][5][3] = document.getElementById('in2').value;
 })
   }else if(tabs[numb][3] == 6){
-    filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Derivative</option><option value="1" ' + defaul(numb, 0, 1) + '>Integral</option><option value="2" ' + defaul(numb, 0, 2) + '>Numbered derivative</option></select>');
+    filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Derivative</option><option value="1" ' + defaul(numb, 0, 1) + '>Integral</option><option value="2" ' + defaul(numb, 0, 2) + '>Antiderivative</option></select>');
     console.log('type', tabs[numb][3])
     document.getElementById('waveType').addEventListener('change', function(){
       var output = [];
