@@ -2111,7 +2111,7 @@ function compare(wave, compare){
     var sum = 0;
   var res = []
 while(i<2*(wave.length)){
-sum += Math.floor(Math.sin(i*compare)*(wave[Math.floor((Math.floor((i % wave.length)*10)) % wave.length)])*10000)
+sum += Math.floor(Math.sin(i*compare)*(wave[Math.floor((Math.floor((i % wave.length)*10)) % wave.length)]))
 
   i += 0.1;
 }
@@ -2335,23 +2335,21 @@ function calc(tab, file){
    output.push(file[file.length-1])
     }
     if(Func == 1){
-     var i = 0;
-     var output = [];
-     while(i<file.length){
-     output.push(Math.cos(file[i]))
-     i++;
-     }
+      var i = 0;
+      var output = [];
+      const out = integral(file);
+      while(i<10000){
+      output.push((file[i+1]-file[i]))
+      i++;
+      }
       }
       if(Func == 2){
        var i = 0;
        var output = [];
+       var current = 0;
        while(i<file.length){
-         const ans = Math.tan(file[i]);
-         if(!!ans){
-       output.push(ans)
-         }else{
-           output.push(0)
-         }
+        current += file[i];
+       output.push(current)
        i++;
        } 
         }
