@@ -2502,11 +2502,11 @@ function statistic(tab, file){
   var out = 0;
   if(Func == 0){
    var i = 0;
-   var output = [];
    while(i<file.length){
-   output.push(Math.sin(file[i]))
+   out += (file[i])
    i++;
    }
+   out /= file.length;
     }
     if(Func == 1){
      var i = 0;
@@ -2642,8 +2642,12 @@ let list = document.getElementById("functions").innerHTML;
   const link = document.getElementById('functionpicker');
   link.style.visibility = 'hidden';
 }
-function customFunc(tab){
-  
+function customFunc(tab, file){
+  if(!file){
+    alert('Please add a function input!')
+  }else{
+  return(eval('function h(){var io = {input:[' + file + '], output:0}; ' + String(tabs[tab][5][1]) + '; return(io.output);}; h();'))
+  }
 }
 function customWave(tab){
 const freq = tabs[tab][5][0];
@@ -2771,7 +2775,7 @@ function tab(numb){
   // decides if picking or using tab
 
   if(picking){
-    if(tabs[numb][1] || tabs[numb][3] == 3 || tabs[numb][3] == 10 || tabs[numb][3] == 9){
+    if(tabs[numb][1] || tabs[numb][3] == 3 || tabs[numb][3] == 10 || tabs[numb][3] == 9 || tabs[numb][3] == 7){
       document.getElementById('input').style.display = 'none';
     }else{
       document.getElementById('input').style.display = 'block';
@@ -2826,7 +2830,7 @@ tabfiles[global] = ['']
     console.log("tabdata", tabdata);
     const filer = document.getElementById("filer");
     //
-      if(tabs[numb][3] == 3){
+if(tabs[numb][3] == 3){
         console.log('tabfiles:', defaul(numb, 1, 0))
         filer.innerHTML = String('<label for="wavePlace">Wave place</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><label for="waveType">Options</label><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Square wave</option><option value="1" ' + defaul(numb, 0, 1) + '>Triangle wave</option><option value="2" ' + defaul(numb, 0, 2) + '>Rising edge sawtooth wave</option><option value="3" ' + defaul(numb, 0, 3) + '>Falling edge sawtooth wave</option><option value="4" ' + defaul(numb, 0, 4) + '>Sine wave</option><option value="5" ' + defaul(numb, 0, 5) + '>Straight line</option><option value="6" ' + defaul(numb, 0, 6) + '>Noise</option><option value="7" ' + defaul(numb, 0, 7) + '>Exponential function</option></select><label for="waveFreq">Frequency 1-0.01</label><input type="range" min="1" max="100" value="' + defaul(numb, 1, 0) + '" id="waveFreq"><label for="waveLength">Length 1-10000</label><input type="range" min="1" max="10000" value="' + defaul(numb, 2, 3) + '" id="waveLength"><label for=wavePeak">Maximum wave value 1-100</label><input type="range" min="1" max="100" value="' + defaul(numb, 2, 2) + '" id="wavePeak">');
         console.log('type', tabs[numb][3])
@@ -2860,7 +2864,7 @@ tabfiles[global] = ['']
             i++
           }
           })
-    }else if(tabs[numb][3] == 4){
+}else if(tabs[numb][3] == 4){
       console.log('tabfiles:', defaul(numb, 1, 0))
       filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Sine</option><option value="1" ' + defaul(numb, 0, 1) + '>Cosine</option><option value="2" ' + defaul(numb, 0, 2) + '>Tangeant</option><option value="3" ' + defaul(numb, 0, 3) + '>Sinc</option><option value="4" ' + defaul(numb, 0, 4) + '>Hyperbolic sine</option><option value="5" ' + defaul(numb, 0, 5) + '>Hyperbolic cosine</option><option value="6" ' + defaul(numb, 0, 6) + '>Hyperbolic tangent</option><option value="7" ' + defaul(numb, 0, 7) + '>Secant</option><option value="8" ' + defaul(numb, 0, 8) + '>Cosecant</option><option value="9" ' + defaul(numb, 0, 9) + '>Cotangeant</option></select>');
       console.log('type', tabs[numb][3])
@@ -2877,12 +2881,12 @@ tabfiles[global] = ['']
           i++
         }
         })
-  }else if(tabs[numb][3] == 10){
+}else if(tabs[numb][3] == 10){
     filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><textarea placeholder="Type a number. For specialized constants like π or e, type in the values: PI, E, PHI, SQ2, LN2" id="setConst">' + defaul(numb, 1, 0) + '</textarea>');
     document.getElementById('setConst').addEventListener('change', function(){
             tabs[numb][5][0] = document.getElementById('setConst').value;
       })
-  }else if(tabs[numb][3] == 7){
+}else if(tabs[numb][3] == 7){
     filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><button id="in1">Input</button><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>+</option><option value="1" ' + defaul(numb, 0, 1) + '>-</option><option value="2" ' + defaul(numb, 0, 2) + '>&times</option><option value="3" ' + defaul(numb, 0, 3) + '>&divide</option><option value="4" ' + defaul(numb, 0, 4) + '>^</option><option value="5" ' + defaul(numb, 0, 5) + '>&#8730</option><option value="6" ' + defaul(numb, 0, 6) + '>log</option></select><button id="in2">Input</button>');
     document.getElementById('waveType').addEventListener('change', function(){
             tabs[numb][5][1] = document.getElementById('waveType').value;
@@ -2911,7 +2915,7 @@ tabfiles[global] = ['']
       document.getElementById('tab').style.backgroundColor = '#183985';
     }
 })
-  }else if(tabs[numb][3] == 6){
+}else if(tabs[numb][3] == 6){
     filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Derivative</option><option value="1" ' + defaul(numb, 0, 1) + '>Integral</option><option value="2" ' + defaul(numb, 0, 2) + '>Antiderivative</option></select>');
     console.log('type', tabs[numb][3])
     document.getElementById('waveType').addEventListener('change', function(){
@@ -2967,7 +2971,6 @@ document.getElementById('in2').addEventListener('click', function(){
   }
 })
 }else if(tabs[numb][3] == 11){
-  console.log('tabfiles:', defaul(numb, 1, 0))
   filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Mean</option><option value="1" ' + defaul(numb, 0, 1) + '>Mode</option><option value="2" ' + defaul(numb, 0, 2) + '>Median</option><option value="3" ' + defaul(numb, 0, 3) + '>Standard deviation</option></select>');
   console.log('type', tabs[numb][3])
   document.getElementById('waveType').addEventListener('change', function(){
@@ -2983,6 +2986,11 @@ document.getElementById('in2').addEventListener('click', function(){
       i++
     }
     })
+}else if(tabs[numb][3] == 12){
+  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><textarea rows="10" cols="40" placeholder="Type the function in JavaScript. The object named -io- contains the function input (-io.input-), and should have the function output placed in -io.output-. Please be careful when creating functions, as they make use of the JavaScript eval function. Infinite loops, and variables with identical names to program variables may cause error." id="text">' + defaul(numb, 2, 1) + '</textarea>');
+  document.getElementById('text').addEventListener('input', function(){
+   tabs[numb][5][1] = document.getElementById('text').value;
+  })
 }else{  
 filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace">');
       }
@@ -3135,7 +3143,7 @@ if(!tabs[i][1]){
     tabfiles[i] = statistic(i, file)
   }
   if(doneFunction == 12){
-    tabfiles[i] = customFunc(i)
+    tabfiles[i] = customFunc(i, file)
   }
 }
    i++
@@ -3147,4 +3155,3 @@ i2++
 function delet(){
   process();
 }
-//alert(eval('function h(){var i = 0; var output = []; while(i<10){output.push(i); i++}; return(output);}; h();'))
