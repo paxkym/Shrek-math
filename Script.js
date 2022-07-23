@@ -2213,10 +2213,8 @@ function arith(tab){
   var input1;
   var input2;
   var output = [];
-  console.log('typedx', type)
     input1 = tabfiles[tabs[tab][5][2]];
     input2 = tabfiles[tabs[tab][5][3]];
-  console.log('1:', input1, '2:', input2)
   var max = input1.length;
   if(input1 < input2){
     max = input2.length;
@@ -2227,7 +2225,6 @@ if(type == 0){
 output.push(input1[i] + input2[i])
 i++;
   }
-  console.log(output, 'outputffcc')
 }
 if(type == 1){
   i = 0;
@@ -2312,8 +2309,85 @@ while(i<wave.length){
   }
   return output;
 }
-function boolean(){
-
+function boolean(tab){
+  const type = tabs[tab][5][1];
+  var i = 0;
+  var input1;
+  var input2;
+  var output = [];
+  console.log('typedx', type)
+    input1 = tabfiles[tabs[tab][5][2]];
+    input2 = tabfiles[tabs[tab][5][3]];
+  console.log('1:', input1, '2:', input2)
+  var max = input1.length;
+  if(input1 < input2){
+    max = input2.length;
+  }
+if(type == 0){
+  i = 0;
+  while(i<max){
+output.push(input1[i] == input2[i])
+i++;
+  }
+  console.log(output, 'outputffcc')
+}
+if(type == 1){
+  i = 0;
+  while(i<max){
+output.push(input1[i] < input2[i])
+i++;
+  }
+}
+if(type == 2){
+  i = 0;
+  while(i<max){
+output.push(input1[i] || input2[i])
+i++;
+  }
+}
+if(type == 3){
+  i = 0;
+  while(i<max){
+output.push(input1[i] && input2[i])
+i++;
+  }
+}
+if(type == 4){
+  i = 0;
+  while(i<max){
+output.push(!input1[i])
+i++;
+  }
+}
+if(type == 5){
+  i = 0;
+  while(i<max){
+output.push(!(input1[i] || input1[i]))
+i++;
+  }
+}
+if(type == 6){
+  i = 0;
+  while(i<max){
+output.push(!(input2[i] && input1[i]))
+i++;
+  }
+}
+if(type == 7){
+  i = 0;
+  while(i<max){
+output.push((input2[i] && !input1[i]) || (!input2[i] && input1[i]))
+i++;
+  }
+}
+if(type == 8){
+  i = 0;
+  while(i<max){
+    output.push((!input2[i] && !input1[i]) || (input2[i] && input1[i]))
+i++;
+  }
+}
+return output;
 }
 function calc(tab, file){
   const Func = tabs[tab][5][1];
@@ -2670,10 +2744,10 @@ function tab(numb){
   // decides if picking or using tab
 
   if(picking){
-    if(tabs[numb][1] || tabs[numb][3] == 3 || tabs[numb][3] == 10){
-      document.getElementById('input').disabled = true;
+    if(tabs[numb][1] || tabs[numb][3] == 3 || tabs[numb][3] == 10 || tabs[numb][3] == 9){
+      document.getElementById('input').style.display = 'none';
     }else{
-      document.getElementById('input').disabled = false;
+      document.getElementById('input').style.display = 'block';
     }
   var i = 0;
   while(i<tabs.length){
@@ -2826,6 +2900,45 @@ tabfiles[global] = ['']
         i++
       }
       })
+}else if(tabs[numb][3] == 9){
+  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><button id="in1">Input</button><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>=</option><option value="1" ' + defaul(numb, 0, 1) + '><</option><option value="2" ' + defaul(numb, 0, 2) + '>OR</option><option value="3" ' + defaul(numb, 0, 3) + '>AND</option><option value="4" ' + defaul(numb, 0, 4) + '>NOT</option><option value="5" ' + defaul(numb, 0, 5) + '>NOR</option><option value="6" ' + defaul(numb, 0, 6) + '>NAND</option><option value="7" ' + defaul(numb, 0, 7) + '>XOR</option><option value="8" ' + defaul(numb, 0, 8) + '>XNOR</option></select><button id="in2">Input</button>');
+  if(4 == tabs[numb][5][1]){
+    document.getElementById('in2').disabled = true;
+  }else{
+    document.getElementById('in2').disabled = false;
+  }
+  document.getElementById('waveType').addEventListener('change', function(){
+          tabs[numb][5][1] = document.getElementById('waveType').value;
+          if(4 == tabs[numb][5][1]){
+            document.getElementById('in2').disabled = true;
+          }else{
+            document.getElementById('in2').disabled = false;
+          }
+    })
+    document.getElementById('in1').addEventListener('click', function(){
+      globalfunctiontype = 1;
+      document.getElementById('in1').innerHTML = "Cancel"
+      if(picking == false){
+        document.getElementById('in1').innerHTML = "Input"
+        picking = true;
+        document.getElementById('tab').style.backgroundColor = '#B6B6B6';
+      }else{
+        picking = false;
+        document.getElementById('tab').style.backgroundColor = '#183985';
+      }
+})
+document.getElementById('in2').addEventListener('click', function(){
+  globalfunctiontype = 2;
+  document.getElementById('in2').innerHTML = "Cancel"
+  if(picking == false){
+    document.getElementById('in2').innerHTML = "Input"
+    picking = true;
+    document.getElementById('tab').style.backgroundColor = '#B6B6B6';
+  }else{
+    picking = false;
+    document.getElementById('tab').style.backgroundColor = '#183985';
+  }
+})
 }else{  
 filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace">');
       }
@@ -2970,6 +3083,9 @@ if(!tabs[i][1]){
   }
   if(doneFunction == 6){
     tabfiles[i] = calc(i, file)
+  }
+  if(doneFunction == 9){
+    tabfiles[i] = boolean(i)
   }
 }
    i++
