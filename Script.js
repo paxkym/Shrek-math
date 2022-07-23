@@ -2076,24 +2076,6 @@ var arr = [
     -0.1581166821123746,
     -0.42771951267877756
 ]
-function draw(x,y,canv){
-  if(canv){
-  y+=75;
-ctx.moveTo(x, y);
-ctx.lineTo(x+1, y);
-ctx.lineTo(x+1, y+1);
-ctx.lineTo(x, y+1);
-ctx.stroke();
-  }
-  if(!canv){
-      y+=75;
-    ctx2.moveTo(x, y);
-ctx2.lineTo(x+1, y);
-ctx2.lineTo(x+1, y+1);
-ctx2.lineTo(x, y+1);
-ctx2.stroke();
-  }
-}
 function integral(wave){
   var i = 0;
   var output = 0;
@@ -2315,10 +2297,8 @@ function boolean(tab){
   var input1;
   var input2;
   var output = [];
-  console.log('typedx', type)
     input1 = tabfiles[tabs[tab][5][2]];
     input2 = tabfiles[tabs[tab][5][3]];
-  console.log('1:', input1, '2:', input2)
   var max = input1.length;
   if(input1 < input2){
     max = input2.length;
@@ -2329,7 +2309,6 @@ if(type == 0){
 output.push(input1[i] == input2[i])
 i++;
   }
-  console.log(output, 'outputffcc')
 }
 if(type == 1){
   i = 0;
@@ -2517,15 +2496,60 @@ function trig(tab, file){
          console.log(output, file, 'slime')
    return(output)
 }
-function tan(wave){
-  var i = 0;
+function statistic(tab, file){
+  const Func = tabs[tab][5][1];
   var output = [];
-  while(i<wave.length){
-    output.push(Math.ceil(Math.tan(wave[i])*20))
-    i++
-  }
-  return output;
-}
+  var out = 0;
+  if(Func == 0){
+   var i = 0;
+   var output = [];
+   while(i<file.length){
+   output.push(Math.sin(file[i]))
+   i++;
+   }
+    }
+    if(Func == 1){
+     var i = 0;
+     var output = [];
+     while(i<file.length){
+     output.push(Math.cos(file[i]))
+     i++;
+     }
+      }
+      if(Func == 2){
+       var i = 0;
+       var output = [];
+       while(i<file.length){
+         const ans = Math.tan(file[i]);
+         if(!!ans){
+       output.push(ans)
+         }else{
+           output.push(0)
+         }
+       i++;
+       } 
+        }
+        if(Func == 3){
+         var i = 0;
+         var output = [];
+         while(i<file.length){
+           const ans = (Math.sin(file[i])/file[i]);
+           if(!!ans){
+         output.push(ans)
+           }else{
+             output.push(0)
+           }
+         i++;
+         } 
+          }
+          var i = 0;
+          while(i<10000){
+output.push(out);
+i++;
+          };
+          console.log(output, file, 'slime')
+    return(output)
+ }
 async function getFile(){
  [filehandle] = await window.showOpenFilePicker()
   let filedata = await filehandle.getFile(); 
@@ -2617,6 +2641,9 @@ let list = document.getElementById("functions").innerHTML;
     document.getElementById("functions").innerHTML = list;
   const link = document.getElementById('functionpicker');
   link.style.visibility = 'hidden';
+}
+function customFunc(tab){
+  
 }
 function customWave(tab){
 const freq = tabs[tab][5][0];
@@ -2939,6 +2966,23 @@ document.getElementById('in2').addEventListener('click', function(){
     document.getElementById('tab').style.backgroundColor = '#183985';
   }
 })
+}else if(tabs[numb][3] == 11){
+  console.log('tabfiles:', defaul(numb, 1, 0))
+  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Mean</option><option value="1" ' + defaul(numb, 0, 1) + '>Mode</option><option value="2" ' + defaul(numb, 0, 2) + '>Median</option><option value="3" ' + defaul(numb, 0, 3) + '>Standard deviation</option></select>');
+  console.log('type', tabs[numb][3])
+  document.getElementById('waveType').addEventListener('change', function(){
+    var output = [];
+    var i = 0;
+    var i = 0;
+    while(i<tabs.length){
+      if(tabs[i][0]){
+        
+          tabs[i][5][1] = document.getElementById('waveType').value;
+        break;
+      }
+      i++
+    }
+    })
 }else{  
 filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace">');
       }
@@ -3086,6 +3130,12 @@ if(!tabs[i][1]){
   }
   if(doneFunction == 9){
     tabfiles[i] = boolean(i)
+  }
+  if(doneFunction == 11){
+    tabfiles[i] = statistic(i, file)
+  }
+  if(doneFunction == 12){
+    tabfiles[i] = customFunc(i)
   }
 }
    i++
