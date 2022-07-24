@@ -2496,6 +2496,20 @@ function trig(tab, file){
          console.log(output, file, 'slime')
    return(output)
 }
+function transf(tab, file){
+const type = tabs[tab][5][1];
+var output = [];
+if(type == 0){
+output = transform(file);
+}
+if(type == 1){
+  output = mellin(file);
+  }
+  if(type == 2){
+    output = hartley(file);
+    }
+    return output;
+}
 function statistic(tab, file){
   const Func = tabs[tab][5][1];
   var output = [];
@@ -2509,39 +2523,56 @@ function statistic(tab, file){
    out /= file.length;
     }
     if(Func == 1){
-     var i = 0;
-     var output = [];
-     while(i<file.length){
-     output.push(Math.cos(file[i]))
-     i++;
-     }
+      function mode(array)
+      {
+          if(array.length == 0)
+              return null;
+          var modeMap = {};
+          var maxEl = array[0], maxCount = 1;
+          for(var i = 0; i < array.length; i++)
+          {
+              var el = array[i];
+              if(modeMap[el] == null)
+                  modeMap[el] = 1;
+              else
+                  modeMap[el]++;  
+              if(modeMap[el] > maxCount)
+              {
+                  maxEl = el;
+                  maxCount = modeMap[el];
+              }
+          }
+          return maxEl;
+      }
+      out = mode(file);
       }
       if(Func == 2){
-       var i = 0;
-       var output = [];
-       while(i<file.length){
-         const ans = Math.tan(file[i]);
-         if(!!ans){
-       output.push(ans)
-         }else{
-           output.push(0)
+        var i = 0;
+        out = file[Math.ceil(file.length/2)]
          }
-       i++;
-       } 
-        }
-        if(Func == 3){
-         var i = 0;
-         var output = [];
-         while(i<file.length){
-           const ans = (Math.sin(file[i])/file[i]);
-           if(!!ans){
-         output.push(ans)
-           }else{
-             output.push(0)
-           }
-         i++;
-         } 
+         if(Func == 3){
+          var i = 0;
+          var mean = 0;
+          while(i<file.length){
+            mean += file[i];
+            i++;
           }
+          mean /= file.length;
+           i = 0;
+          while(i<file.length){
+            output.push((file[i] - mean)**2);
+            i++
+          }
+          i = 0;
+          mean = 0;
+          while(i<output.length){
+            mean += output[i];
+            i++;
+          }
+          mean /= output.length;
+          out = Math.sqrt(mean);
+          output = [];
+           }
           var i = 0;
           while(i<10000){
 output.push(out);
@@ -2991,6 +3022,12 @@ document.getElementById('in2').addEventListener('click', function(){
   document.getElementById('text').addEventListener('input', function(){
    tabs[numb][5][1] = document.getElementById('text').value;
   })
+}else if(tabs[numb][3] == 8){
+  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Fourier transform</option><option value="1" ' + defaul(numb, 0, 1) + '>Mellin transform</option><option value="2" ' + defaul(numb, 0, 2) + '>Hartley transform</option></select>');
+  console.log('type', tabs[numb][3])
+  document.getElementById('waveType').addEventListener('change', function(){
+          tabs[numb][5][1] = document.getElementById('waveType').value;
+    })
 }else{  
 filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace">');
       }
@@ -3110,17 +3147,6 @@ var file = tabfiles[tabs[i][4]];
    console.log("file", file, i)
    const doneFunction = tabs[i][3];
 if(!tabs[i][1]){
-   if(doneFunction == 1){
-     tabfiles[i] = transform(file);
-     
-   }
-      if(doneFunction == 0){
-     tabfiles[i] = hartley(file);
-   }
-       if(doneFunction == 2){
-         console.log('mell', mellin(arr))
-     tabfiles[i] = mellin(file);
-   }
    if(doneFunction == 3){
     tabfiles[i] = customWave(i);
   }
@@ -3144,6 +3170,9 @@ if(!tabs[i][1]){
   }
   if(doneFunction == 12){
     tabfiles[i] = customFunc(i, file)
+  }
+  if(doneFunction == 8){
+    tabfiles[i] = transf(i, file)
   }
 }
    i++
