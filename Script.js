@@ -1656,10 +1656,17 @@ function trig(tab, file){
    return(output)
 }
 function transf(tab, file){
+  const file2 = file;
 const type = tabs[tab][5][1];
 var output = [];
 if(type == 0){
-output = fourier(file)
+  var i = 0;
+var line2 = [];
+while(i<file2.length){
+  line2.push(file2[i])
+ i++
+}
+output = fourier(line2)
 }
 if(type == 1){
   output = mellin(file);
@@ -2344,4 +2351,3 @@ i2++
 function delet(){
   process();
 }
-alert(transform(arr))
