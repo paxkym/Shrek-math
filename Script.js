@@ -19,6 +19,7 @@ var c2 = document.getElementById("outwave");
 var ctx2 = c2.getContext("2d");
 ctx2.fillStyle = "rgba(0, 0, 0, 0)";
 ctx2.strokeStyle = "#FFF";
+var settings = [false];
 const line = [
     0,
     1,
@@ -1021,7 +1022,14 @@ const line = [
     998,
     999
 ]
-
+if(settings[0]){
+var itr = 0;
+var sinetable = [];
+while(itr<2*Math.PI){
+sinetable.push(Math.sin(itr.toFixed(6)))
+  itr += 0.000001;
+}
+}
 var outwave = new Chart("outwave", {
   type: "line",
   data: {
@@ -1074,7 +1082,9 @@ function removeData(chart) {
   });
   chart.update();
 }
-
+function quicksine(number){
+return(sinetable[~~(~~(((number % 6.283184)*1000000) / 1000000)*1000000)])
+}
 function integral(wave){
   var i = 0;
   var output = 0;
@@ -1303,6 +1313,19 @@ function hartley(wave){
   var wav = [];
   var output = [];
   const mult = (1/Math.sqrt(2*Math.PI));
+  if(settings[0]){
+  const offset = Math.PI/2;
+  while(i2<wave.length){
+while(i<wave.length){
+  wav.push((wave[i]*(quicksine(i*i2) + quicksine((i*i2)+offset))))
+  i++;
+}
+    i = 0;
+    output.push((integral(wav)/2) * mult);
+    wav = [];
+    i2++;
+  }
+}else{
   while(i2<wave.length){
 while(i<wave.length){
   wav.push((wave[i]*(Math.sin(i*i2) + Math.cos(i*i2))))
@@ -1313,6 +1336,7 @@ while(i<wave.length){
     wav = [];
     i2++;
   }
+}
   return(output);
 }
 function gamma(z){
