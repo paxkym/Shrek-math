@@ -1772,6 +1772,11 @@ i++;
           console.log(output, file, 'slime')
     return(output)
  }
+ function theme(){
+  const palette = settings[1];
+document.body.style.backgroundColor = palette[0];
+ }
+ theme();
 async function getFile(){
  [filehandle] = await window.showOpenFilePicker()
   let filedata = await filehandle.getFile(); 
@@ -1787,8 +1792,21 @@ document.getElementById('settings').addEventListener('click', function(){
   document.getElementById('theme').addEventListener('change', function(){
   const theme = document.getElementById('theme').value;
   if(theme == 0){
-    settings[1] = 
+    settings[1] = ['#D0CCD0', '#FBFCFF', '#329F5B', '#5C95FF', '#6F2DBD']
   }
+  if(theme == 1){
+    settings[1] = ['#D0CCD0', '#FBFCFF', '#329F5B', '#5C95FF', '#6F2DBD']
+  }
+  if(theme == 2){
+    settings[1] = ['#FFD4E9', '#FCC5C9', '#BFC3EE', '#25EADA', '#70FAA5']
+  }
+  if(theme == 3){
+    settings[1] = ['#3B5A9D', '#C87DE3', '#739250', '#AE9E67', '#7465E2']
+  }
+  if(theme == 4){
+    settings[1] = ['#330036', '#38182F', '#2F394D', '#56666B', '#82A3A1']
+  }
+  theme();
   })
 })
 const input = document.getElementById('fileInput');
