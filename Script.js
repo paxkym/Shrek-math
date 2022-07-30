@@ -19,7 +19,7 @@ var c2 = document.getElementById("outwave");
 var ctx2 = c2.getContext("2d");
 ctx2.fillStyle = "rgba(0, 0, 0, 0)";
 ctx2.strokeStyle = "#FFF";
-var settings = [false];
+var settings = [false, []];
 const line = [
     0,
     1,
@@ -1022,9 +1022,9 @@ const line = [
     998,
     999
 ]
-if(settings[0]){
 var itr = 0;
 var sinetable = [];
+if(false){
 while(itr<2*Math.PI){
 sinetable.push(Math.sin(itr.toFixed(6)))
   itr += 0.000001;
@@ -1567,7 +1567,7 @@ function calc(tab, file){
       var output = [];
       const out = integral(file);
       while(i<10000){
-      output.push((file[i+1]-file[i]))
+      output.push(out)
       i++;
       }
       }
@@ -1779,6 +1779,18 @@ await filedata.text().then(result => {
         return(result);
   })
 }
+document.getElementById('settings').addEventListener('click', function(){
+  filer.innerHTML = '<table><tr><td><h4 style="color:aqua">Quick mode</h4><label class="switch" title="Quick mode will increase the speed of certain functions, but decrease their resolution. This is achieved through a precalculated function table. This process increases boot up time." id="quick"><input type="checkbox"><span class="slider round"></span></label></td><td><select id="theme"><option selected disabled hidden>Theme</option><option value="0">Light</option><option value="1">Dark</option><option value="2">Opalescent</option><option value="3">Prismatic</option><option value="4">Midnight</option><option value="5">Sunset</option></select></td></tr></table>';
+  document.getElementById('quick').addEventListener('change', function(){
+    settings[0] = !settings[0];
+  })
+  document.getElementById('theme').addEventListener('change', function(){
+  const theme = document.getElementById('theme').value;
+  if(theme == 0){
+    settings[1] = 
+  }
+  })
+})
 const input = document.getElementById('fileInput');
 input.addEventListener('change', function (e) {
   ctx.clearRect(0, 0, c.width, c.height);
@@ -1992,6 +2004,7 @@ return output;
 function close(){ 
   document.getElementById('filepicker').style.visibility = 'hidden';
 document.getElementById('functionpicker').style.visibility = 'hidden';
+document.getElementById('filer').innerHTML = '';
 }
 function tab(numb){
   // decides if picking or using tab
@@ -2268,7 +2281,7 @@ var output = [];
       var place;
     place += document.getElementById('WavePlace').value;
       var i = 0;
-      var output = 0;
+      var output = [];
       while(i<1000){
         output.push(tabfiles[tabs[global][4]][Math.ceil(i+parseFloat(document.getElementById('WavePlace').value))])
         i+=1;
