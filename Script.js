@@ -11,1018 +11,14 @@ var tabs = [];
 var picking = true;
   let global2;
 let filehandle;
-var c = document.getElementById("inwave");
-var ctx = c.getContext("2d");
-ctx.fillStyle = "rgba(0, 0, 0, 0)";
-ctx.strokeStyle = "#FFF";
-var c2 = document.getElementById("outwave");
-var ctx2 = c2.getContext("2d");
-ctx2.fillStyle = "rgba(0, 0, 0, 0)";
-ctx2.strokeStyle = "#FFF";
 var settings = [false, []];
-const line = [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20,
-    21,
-    22,
-    23,
-    24,
-    25,
-    26,
-    27,
-    28,
-    29,
-    30,
-    31,
-    32,
-    33,
-    34,
-    35,
-    36,
-    37,
-    38,
-    39,
-    40,
-    41,
-    42,
-    43,
-    44,
-    45,
-    46,
-    47,
-    48,
-    49,
-    50,
-    51,
-    52,
-    53,
-    54,
-    55,
-    56,
-    57,
-    58,
-    59,
-    60,
-    61,
-    62,
-    63,
-    64,
-    65,
-    66,
-    67,
-    68,
-    69,
-    70,
-    71,
-    72,
-    73,
-    74,
-    75,
-    76,
-    77,
-    78,
-    79,
-    80,
-    81,
-    82,
-    83,
-    84,
-    85,
-    86,
-    87,
-    88,
-    89,
-    90,
-    91,
-    92,
-    93,
-    94,
-    95,
-    96,
-    97,
-    98,
-    99,
-    100,
-    101,
-    102,
-    103,
-    104,
-    105,
-    106,
-    107,
-    108,
-    109,
-    110,
-    111,
-    112,
-    113,
-    114,
-    115,
-    116,
-    117,
-    118,
-    119,
-    120,
-    121,
-    122,
-    123,
-    124,
-    125,
-    126,
-    127,
-    128,
-    129,
-    130,
-    131,
-    132,
-    133,
-    134,
-    135,
-    136,
-    137,
-    138,
-    139,
-    140,
-    141,
-    142,
-    143,
-    144,
-    145,
-    146,
-    147,
-    148,
-    149,
-    150,
-    151,
-    152,
-    153,
-    154,
-    155,
-    156,
-    157,
-    158,
-    159,
-    160,
-    161,
-    162,
-    163,
-    164,
-    165,
-    166,
-    167,
-    168,
-    169,
-    170,
-    171,
-    172,
-    173,
-    174,
-    175,
-    176,
-    177,
-    178,
-    179,
-    180,
-    181,
-    182,
-    183,
-    184,
-    185,
-    186,
-    187,
-    188,
-    189,
-    190,
-    191,
-    192,
-    193,
-    194,
-    195,
-    196,
-    197,
-    198,
-    199,
-    200,
-    201,
-    202,
-    203,
-    204,
-    205,
-    206,
-    207,
-    208,
-    209,
-    210,
-    211,
-    212,
-    213,
-    214,
-    215,
-    216,
-    217,
-    218,
-    219,
-    220,
-    221,
-    222,
-    223,
-    224,
-    225,
-    226,
-    227,
-    228,
-    229,
-    230,
-    231,
-    232,
-    233,
-    234,
-    235,
-    236,
-    237,
-    238,
-    239,
-    240,
-    241,
-    242,
-    243,
-    244,
-    245,
-    246,
-    247,
-    248,
-    249,
-    250,
-    251,
-    252,
-    253,
-    254,
-    255,
-    256,
-    257,
-    258,
-    259,
-    260,
-    261,
-    262,
-    263,
-    264,
-    265,
-    266,
-    267,
-    268,
-    269,
-    270,
-    271,
-    272,
-    273,
-    274,
-    275,
-    276,
-    277,
-    278,
-    279,
-    280,
-    281,
-    282,
-    283,
-    284,
-    285,
-    286,
-    287,
-    288,
-    289,
-    290,
-    291,
-    292,
-    293,
-    294,
-    295,
-    296,
-    297,
-    298,
-    299,
-    300,
-    301,
-    302,
-    303,
-    304,
-    305,
-    306,
-    307,
-    308,
-    309,
-    310,
-    311,
-    312,
-    313,
-    314,
-    315,
-    316,
-    317,
-    318,
-    319,
-    320,
-    321,
-    322,
-    323,
-    324,
-    325,
-    326,
-    327,
-    328,
-    329,
-    330,
-    331,
-    332,
-    333,
-    334,
-    335,
-    336,
-    337,
-    338,
-    339,
-    340,
-    341,
-    342,
-    343,
-    344,
-    345,
-    346,
-    347,
-    348,
-    349,
-    350,
-    351,
-    352,
-    353,
-    354,
-    355,
-    356,
-    357,
-    358,
-    359,
-    360,
-    361,
-    362,
-    363,
-    364,
-    365,
-    366,
-    367,
-    368,
-    369,
-    370,
-    371,
-    372,
-    373,
-    374,
-    375,
-    376,
-    377,
-    378,
-    379,
-    380,
-    381,
-    382,
-    383,
-    384,
-    385,
-    386,
-    387,
-    388,
-    389,
-    390,
-    391,
-    392,
-    393,
-    394,
-    395,
-    396,
-    397,
-    398,
-    399,
-    400,
-    401,
-    402,
-    403,
-    404,
-    405,
-    406,
-    407,
-    408,
-    409,
-    410,
-    411,
-    412,
-    413,
-    414,
-    415,
-    416,
-    417,
-    418,
-    419,
-    420,
-    421,
-    422,
-    423,
-    424,
-    425,
-    426,
-    427,
-    428,
-    429,
-    430,
-    431,
-    432,
-    433,
-    434,
-    435,
-    436,
-    437,
-    438,
-    439,
-    440,
-    441,
-    442,
-    443,
-    444,
-    445,
-    446,
-    447,
-    448,
-    449,
-    450,
-    451,
-    452,
-    453,
-    454,
-    455,
-    456,
-    457,
-    458,
-    459,
-    460,
-    461,
-    462,
-    463,
-    464,
-    465,
-    466,
-    467,
-    468,
-    469,
-    470,
-    471,
-    472,
-    473,
-    474,
-    475,
-    476,
-    477,
-    478,
-    479,
-    480,
-    481,
-    482,
-    483,
-    484,
-    485,
-    486,
-    487,
-    488,
-    489,
-    490,
-    491,
-    492,
-    493,
-    494,
-    495,
-    496,
-    497,
-    498,
-    499,
-    500,
-    501,
-    502,
-    503,
-    504,
-    505,
-    506,
-    507,
-    508,
-    509,
-    510,
-    511,
-    512,
-    513,
-    514,
-    515,
-    516,
-    517,
-    518,
-    519,
-    520,
-    521,
-    522,
-    523,
-    524,
-    525,
-    526,
-    527,
-    528,
-    529,
-    530,
-    531,
-    532,
-    533,
-    534,
-    535,
-    536,
-    537,
-    538,
-    539,
-    540,
-    541,
-    542,
-    543,
-    544,
-    545,
-    546,
-    547,
-    548,
-    549,
-    550,
-    551,
-    552,
-    553,
-    554,
-    555,
-    556,
-    557,
-    558,
-    559,
-    560,
-    561,
-    562,
-    563,
-    564,
-    565,
-    566,
-    567,
-    568,
-    569,
-    570,
-    571,
-    572,
-    573,
-    574,
-    575,
-    576,
-    577,
-    578,
-    579,
-    580,
-    581,
-    582,
-    583,
-    584,
-    585,
-    586,
-    587,
-    588,
-    589,
-    590,
-    591,
-    592,
-    593,
-    594,
-    595,
-    596,
-    597,
-    598,
-    599,
-    600,
-    601,
-    602,
-    603,
-    604,
-    605,
-    606,
-    607,
-    608,
-    609,
-    610,
-    611,
-    612,
-    613,
-    614,
-    615,
-    616,
-    617,
-    618,
-    619,
-    620,
-    621,
-    622,
-    623,
-    624,
-    625,
-    626,
-    627,
-    628,
-    629,
-    630,
-    631,
-    632,
-    633,
-    634,
-    635,
-    636,
-    637,
-    638,
-    639,
-    640,
-    641,
-    642,
-    643,
-    644,
-    645,
-    646,
-    647,
-    648,
-    649,
-    650,
-    651,
-    652,
-    653,
-    654,
-    655,
-    656,
-    657,
-    658,
-    659,
-    660,
-    661,
-    662,
-    663,
-    664,
-    665,
-    666,
-    667,
-    668,
-    669,
-    670,
-    671,
-    672,
-    673,
-    674,
-    675,
-    676,
-    677,
-    678,
-    679,
-    680,
-    681,
-    682,
-    683,
-    684,
-    685,
-    686,
-    687,
-    688,
-    689,
-    690,
-    691,
-    692,
-    693,
-    694,
-    695,
-    696,
-    697,
-    698,
-    699,
-    700,
-    701,
-    702,
-    703,
-    704,
-    705,
-    706,
-    707,
-    708,
-    709,
-    710,
-    711,
-    712,
-    713,
-    714,
-    715,
-    716,
-    717,
-    718,
-    719,
-    720,
-    721,
-    722,
-    723,
-    724,
-    725,
-    726,
-    727,
-    728,
-    729,
-    730,
-    731,
-    732,
-    733,
-    734,
-    735,
-    736,
-    737,
-    738,
-    739,
-    740,
-    741,
-    742,
-    743,
-    744,
-    745,
-    746,
-    747,
-    748,
-    749,
-    750,
-    751,
-    752,
-    753,
-    754,
-    755,
-    756,
-    757,
-    758,
-    759,
-    760,
-    761,
-    762,
-    763,
-    764,
-    765,
-    766,
-    767,
-    768,
-    769,
-    770,
-    771,
-    772,
-    773,
-    774,
-    775,
-    776,
-    777,
-    778,
-    779,
-    780,
-    781,
-    782,
-    783,
-    784,
-    785,
-    786,
-    787,
-    788,
-    789,
-    790,
-    791,
-    792,
-    793,
-    794,
-    795,
-    796,
-    797,
-    798,
-    799,
-    800,
-    801,
-    802,
-    803,
-    804,
-    805,
-    806,
-    807,
-    808,
-    809,
-    810,
-    811,
-    812,
-    813,
-    814,
-    815,
-    816,
-    817,
-    818,
-    819,
-    820,
-    821,
-    822,
-    823,
-    824,
-    825,
-    826,
-    827,
-    828,
-    829,
-    830,
-    831,
-    832,
-    833,
-    834,
-    835,
-    836,
-    837,
-    838,
-    839,
-    840,
-    841,
-    842,
-    843,
-    844,
-    845,
-    846,
-    847,
-    848,
-    849,
-    850,
-    851,
-    852,
-    853,
-    854,
-    855,
-    856,
-    857,
-    858,
-    859,
-    860,
-    861,
-    862,
-    863,
-    864,
-    865,
-    866,
-    867,
-    868,
-    869,
-    870,
-    871,
-    872,
-    873,
-    874,
-    875,
-    876,
-    877,
-    878,
-    879,
-    880,
-    881,
-    882,
-    883,
-    884,
-    885,
-    886,
-    887,
-    888,
-    889,
-    890,
-    891,
-    892,
-    893,
-    894,
-    895,
-    896,
-    897,
-    898,
-    899,
-    900,
-    901,
-    902,
-    903,
-    904,
-    905,
-    906,
-    907,
-    908,
-    909,
-    910,
-    911,
-    912,
-    913,
-    914,
-    915,
-    916,
-    917,
-    918,
-    919,
-    920,
-    921,
-    922,
-    923,
-    924,
-    925,
-    926,
-    927,
-    928,
-    929,
-    930,
-    931,
-    932,
-    933,
-    934,
-    935,
-    936,
-    937,
-    938,
-    939,
-    940,
-    941,
-    942,
-    943,
-    944,
-    945,
-    946,
-    947,
-    948,
-    949,
-    950,
-    951,
-    952,
-    953,
-    954,
-    955,
-    956,
-    957,
-    958,
-    959,
-    960,
-    961,
-    962,
-    963,
-    964,
-    965,
-    966,
-    967,
-    968,
-    969,
-    970,
-    971,
-    972,
-    973,
-    974,
-    975,
-    976,
-    977,
-    978,
-    979,
-    980,
-    981,
-    982,
-    983,
-    984,
-    985,
-    986,
-    987,
-    988,
-    989,
-    990,
-    991,
-    992,
-    993,
-    994,
-    995,
-    996,
-    997,
-    998,
-    999
-]
 var itr = 0;
+var line = [];
+while(itr<100){
+  line.push(itr);
+  itr++;
+}
+itr = 0;
 var sinetable = [];
 if(false){
 while(itr<2*Math.PI){
@@ -1095,6 +91,7 @@ function integral(wave){
    output += (wave[i]);
        i++;
   }
+  console.log(output[2],output[1],output[0], 'dsdsds')
   return(output);
 }
 function compare(wave, compare){
@@ -1279,7 +276,7 @@ function fourier(real){
           output.push(Math.sqrt(imag[jo] *imag[jo] + real[0] * real[0])/ len *2);
       }
       return output.reverse();
-  }
+}
 function file2wave(fil){
       var wave = [];
   const reader = new FileReader()
@@ -1340,13 +337,7 @@ while(i<wave.length){
   return(output);
 }
 function gamma(z){
-  var i = 0;
-  var wave = [];
-  while(i<z.length){
-wave.push((Math.sqrt(2*pi))*(e**(-1*(z[i])))*(z[i]**(z[i]+0.5)))
-    i++
-  }
-  return wave;
+  return(Math.sqrt(2*Math.PI*z)*((z/Math.E)**z));
 }
 function constfunc(tab){
 const file = tabs[tab][5][0];
@@ -1423,7 +414,7 @@ i++;
 if(type == 5){
   i = 0;
   while(i<max){
-output.push(input2[i] ** 1/input1[i])
+output.push((input2[i])**(1/input1[i]))
 i++;
   }
 }
@@ -1436,23 +427,21 @@ i++;
 }
 return output;
 }
-function zeta(wave){
-  var i = 0;
-  var i2 = 0;
-  var output = [];
+function zeta(s){
+  var i = 1;
   var out = 0;
-  while(i2<wave.length){
-    while(i<1000){
-      out += 1/((i+1)**wave[i2])
-      
+  if(settings[0]){
+    while(i<100){
+      out += 1/((i)**s)
       i++;
     }
-    i2++;
-    output.push(out);
-    out = 0;
-    i=0;
+  }else{
+    while(i<10000){
+      out += 1/((i)**s)
+      i++;
+    }
   }
-  return(output);
+  return(out);
 }
 function mellin(wave){
     var i = 0;
@@ -1583,7 +572,59 @@ function calc(tab, file){
         }
           console.log(output, file, 'slime')
     return(output)
- }
+}
+function misc(tab, file){
+  const Func = tabs[tab][5][1];
+  if(Func == 0){
+   var i = 0;
+   var output = [];
+   while(i<file.length){
+   output.push(Math.floor(file[i]))
+   i++;
+   }
+    }
+    if(Func == 1){
+     var i = 0;
+     var output = [];
+     while(i<file.length){
+     output.push(Math.ceil(file[i]))
+     i++;
+     }
+      }
+      if(Func == 2){
+       var i = 0;
+       var output = [];
+       while(i<file.length){
+         output.push(Math.abs(file[i]));
+       i++;
+       } 
+        }
+        if(Func == 3){
+         var output = []
+         var i = 0;
+         while(i<file.length){
+          output.push(gamma(file[i]));
+          i++;
+         }
+         }
+          if(Func == 4){
+            var output = []
+            var i = 0;
+            while(i<file.length){
+             output.push(zeta(file[i]));
+             i++;
+            }
+            }
+            if(Func == 5){
+             var i = 0;
+             var output = [];
+             while(i<file.length){
+             output.push(Math.sqrt(file[i]))
+             i++;
+             }
+              }
+    return(output)
+}
 function trig(tab, file){
  const trigFunc = tabs[tab][5][1];
  if(trigFunc == 0){
@@ -1771,12 +812,37 @@ i++;
           };
           console.log(output, file, 'slime')
     return(output)
- }
- function theme(){
+}
+function setTheme(){
   const palette = settings[1];
 document.body.style.backgroundColor = palette[0];
+console.log(document.getElementsByName('label0'))
+if(document.getElementsByName('label0').length != 0){
+const labels = document.getElementsByName('label0')
+const buttons = document.getElementsByTagName('button')
+var i = 0;
+while(i<labels.length){
+ labels.item(i).style.backgroundColor = palette[1];
+ i++;
+}
+i = 0;
+while(i<labels.length){
+  labels.item(i).style.color = palette[2];
+  i++;
  }
- theme();
+ i = 0;
+while(i<buttons.length){
+  buttons.item(i).style.backgroundColor = palette[3];
+  i++;
+ }
+ i = 0;
+ while(i<buttons.length){
+  buttons.item(i).style.color = palette[4];
+  i++;
+ }
+}
+}
+ setTheme();
 async function getFile(){
  [filehandle] = await window.showOpenFilePicker()
   let filedata = await filehandle.getFile(); 
@@ -1785,28 +851,22 @@ await filedata.text().then(result => {
   })
 }
 document.getElementById('settings').addEventListener('click', function(){
-  filer.innerHTML = '<table><tr><td><h4 style="color:aqua">Quick mode</h4><label class="switch" title="Quick mode will increase the speed of certain functions, but decrease their resolution. This is achieved through a precalculated function table. This process increases boot up time." id="quick"><input type="checkbox"><span class="slider round"></span></label></td><td><select id="theme"><option selected disabled hidden>Theme</option><option value="0">Light</option><option value="1">Dark</option><option value="2">Opalescent</option><option value="3">Prismatic</option><option value="4">Midnight</option><option value="5">Sunset</option></select></td></tr></table>';
+  filer.innerHTML = '<table><tr><td><h4 style="color:aqua">Quick mode</h4><label class="switch" title="Quick mode will increase the speed of certain functions, but decrease their resolution. This is achieved through a precalculated function table. This process increases boot up time." id="quick"><input type="checkbox"><span class="slider round"></span></label></td><td><select id="theme"><option selected disabled hidden>Theme</option><option value="0">Snow</option><option value="1">Midnight</option><option value="2">Standard</option></select></td></tr></table>';
   document.getElementById('quick').addEventListener('change', function(){
     settings[0] = !settings[0];
   })
   document.getElementById('theme').addEventListener('change', function(){
   const theme = document.getElementById('theme').value;
   if(theme == 0){
-    settings[1] = ['#D0CCD0', '#FBFCFF', '#329F5B', '#5C95FF', '#6F2DBD']
+    settings[1] = ['#D0CCD0', '#F8F4F9', '#37392E', '#777777', '#EDEDED']
   }
   if(theme == 1){
-    settings[1] = ['#D0CCD0', '#FBFCFF', '#329F5B', '#5C95FF', '#6F2DBD']
+    settings[1] = ['#121212', 'teal', '#000', '#B6B6B6', '#EDEDED']
   }
   if(theme == 2){
-    settings[1] = ['#FFD4E9', '#FCC5C9', '#BFC3EE', '#25EADA', '#70FAA5']
+    settings[1] = ['#121212', '#F8F4F9', '#37392E', '#B6B6B6', '#EDEDED']
   }
-  if(theme == 3){
-    settings[1] = ['#3B5A9D', '#C87DE3', '#739250', '#AE9E67', '#7465E2']
-  }
-  if(theme == 4){
-    settings[1] = ['#330036', '#38182F', '#2F394D', '#56666B', '#82A3A1']
-  }
-  theme();
+  setTheme();
   })
 })
 const input = document.getElementById('fileInput');
@@ -2026,8 +1086,8 @@ document.getElementById('filer').innerHTML = '';
 }
 function tab(numb){
   // decides if picking or using tab
-
   if(picking){
+
     if(tabs[numb][1] || tabs[numb][3] == 3 || tabs[numb][3] == 10 || tabs[numb][3] == 9 || tabs[numb][3] == 7){
       document.getElementById('input').style.display = 'none';
     }else{
@@ -2085,7 +1145,7 @@ tabfiles[global] = ['']
     //
 if(tabs[numb][3] == 3){
         console.log('tabfiles:', defaul(numb, 1, 0))
-        filer.innerHTML = String('<label for="wavePlace">Wave place</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><label for="waveType">Options</label><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Square wave</option><option value="1" ' + defaul(numb, 0, 1) + '>Triangle wave</option><option value="2" ' + defaul(numb, 0, 2) + '>Rising edge sawtooth wave</option><option value="3" ' + defaul(numb, 0, 3) + '>Falling edge sawtooth wave</option><option value="4" ' + defaul(numb, 0, 4) + '>Sine wave</option><option value="5" ' + defaul(numb, 0, 5) + '>Straight line</option><option value="6" ' + defaul(numb, 0, 6) + '>Noise</option><option value="7" ' + defaul(numb, 0, 7) + '>Exponential function</option></select><label for="waveFreq">Frequency 1-0.01</label><input type="range" min="1" max="100" value="' + defaul(numb, 1, 0) + '" id="waveFreq"><label for="waveLength">Length 1-10000</label><input type="range" min="1" max="10000" value="' + defaul(numb, 2, 3) + '" id="waveLength"><label for=wavePeak">Maximum wave value 1-100</label><input type="range" min="1" max="100" value="' + defaul(numb, 2, 2) + '" id="wavePeak">');
+        filer.innerHTML = String('<label for="wavePlace" name="label0">Wave place</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><label for="waveType" name="label0">Options</label><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Square wave</option><option value="1" ' + defaul(numb, 0, 1) + '>Triangle wave</option><option value="2" ' + defaul(numb, 0, 2) + '>Rising edge sawtooth wave</option><option value="3" ' + defaul(numb, 0, 3) + '>Falling edge sawtooth wave</option><option value="4" ' + defaul(numb, 0, 4) + '>Sine wave</option><option value="5" ' + defaul(numb, 0, 5) + '>Straight line</option><option value="6" ' + defaul(numb, 0, 6) + '>Noise</option><option value="7" ' + defaul(numb, 0, 7) + '>Exponential function</option></select><label for="waveFreq" name="label0">Frequency 1-0.01</label><input type="range" min="1" max="100" value="' + defaul(numb, 1, 0) + '" id="waveFreq"><label for="waveLength" name="label0">Length 1-10000</label><input type="range" min="1" max="10000" value="' + defaul(numb, 2, 3) + '" id="waveLength"><label for=wavePeak" name="label0">Maximum wave value 1-100</label><input type="range" min="1" max="100" value="' + defaul(numb, 2, 2) + '" id="wavePeak">');
         console.log('type', tabs[numb][3])
         document.getElementById('waveFreq').addEventListener('change', function(){
           var i = 0;
@@ -2099,7 +1159,7 @@ if(tabs[numb][3] == 3){
           }
         })
         document.getElementById('wavePeak').addEventListener('change', function(){
-                tabs[numb][5][2] = document.getElementById('wavePeak').value;
+                tabs[numb][5][2] = parseFloat(document.getElementById('wavePeak').value);
         })
         document.getElementById('waveLength').addEventListener('change', function(){
           tabs[numb][5][3] = document.getElementById('waveLength').value;
@@ -2250,6 +1310,13 @@ document.getElementById('in2').addEventListener('click', function(){
   document.getElementById('waveType').addEventListener('change', function(){
           tabs[numb][5][1] = document.getElementById('waveType').value;
     })
+}else if(tabs[numb][3] == 5){
+      console.log('tabfiles:', defaul(numb, 1, 0))
+      filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Floor</option><option value="1" ' + defaul(numb, 0, 1) + '>Ceiling</option><option value="2" ' + defaul(numb, 0, 2) + '>Absolute</option><option value="3" ' + defaul(numb, 0, 3) + '>Gamma</option><option value="4" ' + defaul(numb, 0, 4) + '>Zeta</option><option value="5" ' + defaul(numb, 0, 5) + '>Square root</option></select>');
+      console.log('type', tabs[numb][3])
+      document.getElementById('waveType').addEventListener('change', function(){
+              tabs[numb][5][1] = document.getElementById('waveType').value;
+        })
 }else{  
 filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace">');
       }
@@ -2307,11 +1374,9 @@ var output = [];
       inwave.data.datasets[0].data = output;
       inwave.update();
     })
-    
 }
   }
-  console.log(tabfiles)
-
+  console.log(tabfiles);
 }else if(!picking){
   document.getElementById('tab').style.backgroundColor = '#B6B6B6';
   var i = 0;
@@ -2339,6 +1404,7 @@ if(globalfunctiontype == 0){
 }
   picking = true;
 }
+setTheme();
 }
 function process(){
   tabfiles = [];
@@ -2396,13 +1462,15 @@ if(!tabs[i][1]){
   if(doneFunction == 8){
     tabfiles[i] = transf(i, file)
   }
+  if(doneFunction == 5){
+    tabfiles[i] = misc(i, file)
+  }
 }
    i++
  }
 i2++
 }
 }
-
 function delet(){
   process();
 }
