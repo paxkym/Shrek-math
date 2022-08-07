@@ -66,18 +66,6 @@ var inwave = new Chart("inwave", {
     }
   }
 });
-function addData(chart, data) {
-  chart.data.datasets.forEach((dataset) => {
-      dataset.data.push(data);
-  });
-  chart.update();
-}
-function removeData(chart) {
-  chart.data.datasets.forEach((dataset) => {
-      dataset.data.pop();
-  });
-  chart.update();
-}
 function quicksine(number){
 return(sinetable[~~(~~(((number % 6.283184)*1000000) / 1000000)*1000000)])
 }
@@ -93,20 +81,6 @@ function integral(wave){
   }
   console.log(output[2],output[1],output[0], 'dsdsds')
   return(output);
-}
-function compare(wave, compare){
-  var i = 0;
-  // generates a wave array for the transformed signal
-    var sum = 0;
-  var res = []
-while(i<2*(wave.length)){
-sum += Math.floor(Math.sin(i*compare)*(wave[Math.floor((Math.floor((i % wave.length)*10)) % wave.length)])*10000)
-
-  i += 0.1;
-}
-  sum /= 100;
-  sum *= -0.1;
-  return(Math.floor(sum));
 }
 function fourier(real){
   function inverseTransform(real, imag) {
@@ -270,6 +244,175 @@ function fourier(real){
           imag.push(0.0);
       }
       transform(real,imag);
+      var fsample = len/20;
+      var counter = 0;
+      for (var jo = len/2; jo < real.length; jo++){
+          output.push(Math.sqrt(imag[jo] *imag[jo] + real[0] * real[0])/ len *2);
+      }
+      return output.reverse();
+}
+function inversefourier(real){
+  function inverseTransform(real, imag) {
+      transform(imag, real);
+  }
+  function transform(real, imag) {
+      if (real.length != imag.length)
+          throw "Mismatched lengths";
+      
+      var n = real.length;
+      if (n == 0)
+          return;
+      else if ((n & (n - 1)) == 0)  // Is power of 2
+          transformRadix2(real, imag);
+      else  // More complicated algorithm for arbitrary sizes
+          transformBluestein(real, imag);
+  }
+  function transformRadix2(real, imag) {
+      
+      // Initialization
+      var output = [];
+      if (real.length != imag.length)
+          throw "Mismatched lengths";
+      var n = real.length;
+      if (n == 1)  // Trivial transform
+          return;
+      var levels = -1;
+      for (var i = 0; i < 32; i++) {
+          if (1 << i == n)
+              levels = i;  // Equal to log2(n)
+      }
+      if (levels == -1)
+          throw "Length is not a power of 2";
+      var cosTable = new Array(n / 2);
+      var sinTable = new Array(n / 2);
+      for (var i = 0; i < n / 2; i++) {
+          cosTable[i] = Math.cos(2 * Math.PI * i / n);
+          sinTable[i] = Math.sin(2 * Math.PI * i / n);
+      }
+      
+      // Bit-reversed addressing permutation
+      for (var i = 0; i < n; i++) {
+          var j = reverseBits(i, levels);
+          if (j > i) {
+              var temp = real[i];
+              real[i] = real[j];
+              real[j] = temp;
+              temp = imag[i];
+              imag[i] = imag[j];
+              imag[j] = temp;
+          }
+      }
+      
+      // Cooley-Tukey decimation-in-time radix-2 FFT
+      for (var size = 2; size <= n; size *= 2) {
+          var halfsize = size / 2;
+          var tablestep = n / size;
+          for (var i = 0; i < n; i += size) {
+              for (var j = i, k = 0; j < i + halfsize; j++, k += tablestep) {
+                  var tpre =  real[j+halfsize] * cosTable[k] + imag[j+halfsize] * sinTable[k];
+                  var tpim = -real[j+halfsize] * sinTable[k] + imag[j+halfsize] * cosTable[k];
+                  real[j + halfsize] = real[j] - tpre;
+                  imag[j + halfsize] = imag[j] - tpim;
+                  real[j] += tpre;
+                  imag[j] += tpim;
+                  output.push([real[j], imag[j]])
+              }
+          }
+      }
+      
+      // Returns the integer whose value is the reverse of the lowest 'bits' bits of the integer 'x'.
+      function reverseBits(x, bits) {
+          var y = 0;
+          for (var i = 0; i < bits; i++) {
+              y = (y << 1) | (x & 1);
+              x >>>= 1;
+          }
+          return y;
+      }
+      //return output;
+  }
+  function transformBluestein(real, imag) {
+      var output = [];
+      // Find a power-of-2 convolution length m such that m >= n * 2 + 1
+      if (real.length != imag.length)
+          throw "Mismatched lengths";
+      var n = real.length;
+      var m = 1;
+      while (m < n * 2 + 1)
+          m *= 2;
+      
+      // Trignometric tables
+      var cosTable = new Array(n);
+      var sinTable = new Array(n);
+      for (var i = 0; i < n; i++) {
+          var j = i * i % (n * 2);  // This is more accurate than j = i * i
+          cosTable[i] = Math.cos(Math.PI * j / n);
+          sinTable[i] = Math.sin(Math.PI * j / n);
+      }
+      
+      // Temporary vectors and preprocessing
+      var areal = new Array(m);
+      var aimag = new Array(m);
+      for (var i = 0; i < n; i++) {
+          areal[i] =  real[i] * cosTable[i] + imag[i] * sinTable[i];
+          aimag[i] = -real[i] * sinTable[i] + imag[i] * cosTable[i];
+      }
+      for (var i = n; i < m; i++)
+          areal[i] = aimag[i] = 0;
+      var breal = new Array(m);
+      var bimag = new Array(m);
+      breal[0] = cosTable[0];
+      bimag[0] = sinTable[0];
+      for (var i = 1; i < n; i++) {
+          breal[i] = breal[m - i] = cosTable[i];
+          bimag[i] = bimag[m - i] = sinTable[i];
+      }
+      for (var i = n; i <= m - n; i++)
+          breal[i] = bimag[i] = 0;
+      
+      // Convolution
+      var creal = new Array(m);
+      var cimag = new Array(m);
+      convolveComplex(areal, aimag, breal, bimag, creal, cimag);
+      
+      // Postprocessing
+      for (var i = 0; i < n; i++) {
+          real[i] =  creal[i] * cosTable[i] + cimag[i] * sinTable[i];
+          imag[i] = -creal[i] * sinTable[i] + cimag[i] * cosTable[i];
+          output.push([real[i], imag[i]]);
+      }
+      //return output;
+  }
+  function convolveComplex(xreal, ximag, yreal, yimag, outreal, outimag) {
+      if (xreal.length != ximag.length || xreal.length != yreal.length || yreal.length != yimag.length || xreal.length != outreal.length || outreal.length != outimag.length)
+          throw "Mismatched lengths";
+      
+      var n = xreal.length;
+      xreal = xreal.slice(0);
+      ximag = ximag.slice(0);
+      yreal = yreal.slice(0);
+      yimag = yimag.slice(0);
+      
+      transform(xreal, ximag);
+      transform(yreal, yimag);
+      for (var i = 0; i < n; i++) {
+          var temp = xreal[i] * yreal[i] - ximag[i] * yimag[i];
+          ximag[i] = ximag[i] * yreal[i] + xreal[i] * yimag[i];
+          xreal[i] = temp;
+      }
+      inverseTransform(xreal, ximag);
+      for (var i = 0; i < n; i++) {  // Scaling (because this FFT implementation omits it)
+          outreal[i] = xreal[i] / n;
+          outimag[i] = ximag[i] / n;
+      }
+  }
+      var imag = [];
+      var output = [];
+      var len = real.length;
+      for (var i = 0; i < real.length; i++){
+          imag.push(0.0);
+      }
+      transform(imag,real);
       var fsample = len/20;
       var counter = 0;
       for (var jo = len/2; jo < real.length; jo++){
@@ -739,6 +882,18 @@ if(type == 1){
   if(type == 2){
     output = hartley(file);
     }
+    if(type == 3){
+      var i = 0;
+      var line2 = [];
+      while(i<file2.length){
+        line2.push(file2[i])
+       i++
+      }
+      output = inversefourier(line2)
+      }
+      if(type == 4){
+        output = hartley(file);
+        }
     console.log(output, file, 'jss', type)
     return output;
 }
@@ -779,8 +934,7 @@ function statistic(tab, file){
       out = mode(file);
       }
       if(Func == 2){
-        var i = 0;
-        out = file[Math.ceil(file.length/2)]
+        out = file.sort()[Math.ceil(file.length/2)]
          }
          if(Func == 3){
           var i = 0;
@@ -805,6 +959,68 @@ function statistic(tab, file){
           out = Math.sqrt(mean);
           output = [];
            }
+           if(Func == 4){
+            var i = 0;
+            var mean = 0;
+            while(i<file.length){
+              mean += file[i];
+              i++;
+            }
+            mean /= file.length;
+             i = 0;
+            while(i<file.length){
+              output.push((file[i] - mean)**2);
+              i++
+            }
+            i = 0;
+            const avg = mean;
+            mean = 0;
+            while(i<output.length){
+              mean += output[i];
+              i++;
+            }
+            mean /= output.length;
+           const sdv = Math.sqrt(mean);
+            i = 0;
+            var sum = 0;
+            while(i<file.length){
+              sum += ((file[i]-avg)**3)
+              i++;
+            }
+            out = sum/((file.length) * (sdv**3))
+            output = [];
+             }
+             if(Func == 5){
+              var i = 0;
+              var mean = 0;
+              while(i<file.length){
+                mean += file[i];
+                i++;
+              }
+              mean /= file.length;
+               i = 0;
+              while(i<file.length){
+                output.push((file[i] - mean)**2);
+                i++
+              }
+              i = 0;
+              const avg = mean;
+              mean = 0;
+              while(i<output.length){
+                mean += output[i];
+                i++;
+              }
+              mean /= output.length;
+             const sdv = Math.sqrt(mean);
+              i = 0;
+              var sum = 0;
+              while(i<file.length){
+                sum += ((file[i]-avg)**4)
+                i++;
+              }
+              out = sum/((file.length) * (sdv**4))
+              output = [];
+               }
           var i = 0;
           while(i<10000){
 output.push(out);
@@ -1284,7 +1500,7 @@ document.getElementById('in2').addEventListener('click', function(){
   }
 })
 }else if(tabs[numb][3] == 11){
-  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Mean</option><option value="1" ' + defaul(numb, 0, 1) + '>Mode</option><option value="2" ' + defaul(numb, 0, 2) + '>Median</option><option value="3" ' + defaul(numb, 0, 3) + '>Standard deviation</option></select>');
+  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Mean</option><option value="1" ' + defaul(numb, 0, 1) + '>Mode</option><option value="2" ' + defaul(numb, 0, 2) + '>Median</option><option value="3" ' + defaul(numb, 0, 3) + '>Standard deviation</option><option value="4" ' + defaul(numb, 0, 4) + '>Skewness</option><option value="5" ' + defaul(numb, 0, 5) + '>Kurtosis</option></select>');
   console.log('type', tabs[numb][3])
   document.getElementById('waveType').addEventListener('change', function(){
     var output = [];
@@ -1305,7 +1521,7 @@ document.getElementById('in2').addEventListener('click', function(){
    tabs[numb][5][1] = document.getElementById('text').value;
   })
 }else if(tabs[numb][3] == 8){
-  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Fourier transform</option><option value="1" ' + defaul(numb, 0, 1) + '>Mellin transform</option><option value="2" ' + defaul(numb, 0, 2) + '>Hartley transform</option></select>');
+  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Fourier transform</option><option value="1" ' + defaul(numb, 0, 1) + '>Mellin transform</option><option value="2" ' + defaul(numb, 0, 2) + '>Hartley transform</option><option value="3" ' + defaul(numb, 0, 3) + '>Inverse fourier transform</option><option value="4" ' + defaul(numb, 0, 4) + '>Inverse mellin transform</option></select>');
   console.log('type', tabs[numb][3])
   document.getElementById('waveType').addEventListener('change', function(){
           tabs[numb][5][1] = document.getElementById('waveType').value;
