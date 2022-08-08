@@ -11,10 +11,11 @@ var tabs = [];
 var picking = true;
   let global2;
 let filehandle;
-var settings = [false, []];
+var constmax = 10000;
+var settings = [false, [], 600, 10000];
 var itr = 0;
 var line = [];
-while(itr<100){
+while(itr<600){
   line.push(itr);
   itr++;
 }
@@ -500,7 +501,7 @@ if(file == 'PI'){
 }
 var i = 0;
 var output = [];
-while(i<10000){
+while(i<constmax){
 output.push(constant);
 i++;
 }
@@ -585,26 +586,6 @@ function zeta(s){
     }
   }
   return(out);
-}
-function mellin(wave){
-    var i = 0;
-  var i2 = 0;
-  var wav = [];
-  var output = [];
-  while(i2<wave.length){
-while(i<wave.length){
-  wav.push((i**(i2-1))*wave[i])
-  i++;
-}
-    i = 0;
-   const integ = integral(wav);
-    if(!!integ){
-    output.push(integ);
-    }
-    wav = [];
-    i2++;
-  }
-  return output;
 }
 function boolean(tab){
   const type = tabs[tab][5][1];
@@ -698,7 +679,7 @@ function calc(tab, file){
       var i = 0;
       var output = [];
       const out = integral(file);
-      while(i<10000){
+      while(i<constmax){
       output.push(out)
       i++;
       }
@@ -876,13 +857,10 @@ while(i<file2.length){
 }
 output = fourier(line2)
 }
-if(type == 1){
-  output = mellin(file);
-  }
   if(type == 2){
     output = hartley(file);
     }
-    if(type == 3){
+    if(type == 1){
       var i = 0;
       var line2 = [];
       while(i<file2.length){
@@ -891,9 +869,6 @@ if(type == 1){
       }
       output = inversefourier(line2)
       }
-      if(type == 4){
-        output = hartley(file);
-        }
     console.log(output, file, 'jss', type)
     return output;
 }
@@ -1022,7 +997,7 @@ function statistic(tab, file){
               output = [];
                }
           var i = 0;
-          while(i<10000){
+          while(i<constmax){
 output.push(out);
 i++;
           };
@@ -1067,9 +1042,69 @@ await filedata.text().then(result => {
   })
 }
 document.getElementById('settings').addEventListener('click', function(){
-  filer.innerHTML = '<table><tr><td><h4 style="color:aqua">Quick mode</h4><label class="switch" title="Quick mode will increase the speed of certain functions, but decrease their resolution. This is achieved through a precalculated function table. This process increases boot up time." id="quick"><input type="checkbox"><span class="slider round"></span></label></td><td><select id="theme"><option selected disabled hidden>Theme</option><option value="0">Snow</option><option value="1">Midnight</option><option value="2">Standard</option></select></td></tr></table>';
+  close();
+  filer.innerHTML = '<table><tr><td><h4 style="color:#003826">Quick mode</h4><label class="switch" title="Quick mode will increase the speed of certain functions, but decrease their resolution. This is achieved through a precalculated function table. This process increases boot up time." id="quick"><input type="checkbox"><span class="slider round"></span></label></td><td><select id="theme"><option selected disabled hidden>Theme</option><option value="0">Snow</option><option value="1">Midnight</option><option value="2">Standard</option></select></td><td><h4 style="color:#003826">Graph length</h4><input type="range" id="length" max="1000" min="10"></input></td><td><h4 style="color:#003826">Maximum wave length</h4><input type="range" id="maxlength" max="100000" min="100"></input></td></tr></table>';
   document.getElementById('quick').addEventListener('change', function(){
     settings[0] = !settings[0];
+  })
+  document.getElementById('length').addEventListener('change', async function(){
+    const value = document.getElementById('length').value;
+    settings[2] = value;
+    var itr = 0;
+    line = []
+    while(itr<value){
+      line.push(itr);
+      itr++;
+    }
+   await inwave.destroy();
+   await outwave.destroy();
+     outwave = new Chart("outwave", {
+      type: "line",
+      data: {
+        labels: line,
+        datasets: [{
+          fill: false,
+          pointRadius: 1,
+          borderColor: "#006464",
+          data: line,
+          label: 'Output wave'
+        }]
+      },    
+      options: {
+        legend: {display: false},
+        title: {
+          display: true,
+          fontSize: 16
+        }
+      }
+    });
+     inwave = new Chart("inwave", {
+      type: "line",
+      data: {
+        labels: line,
+        datasets: [{
+          fill: false,
+          pointRadius: 1,
+          borderColor: "#00803E",
+          data: line,
+          label: 'Input wave'
+        }]
+      },    
+      options: {
+        legend: {display: false},
+        title: {
+          display: true,
+          fontSize: 16
+        }
+      }
+    });
+       await inwave.render();
+   await outwave.render();
+  })
+  document.getElementById('maxlength').addEventListener('change', async function(){
+    const value = document.getElementById('maxlength').value;
+    settings[3] = value;
+    constmax = value;
   })
   document.getElementById('theme').addEventListener('change', function(){
   const theme = document.getElementById('theme').value;
@@ -1092,14 +1127,25 @@ global2 = (file2wave(input));
 }, false)
 document.getElementById('input').addEventListener('click', async function(){
   globalfunctiontype = 0;
+  const buttons = document.getElementsByName('tab');
   document.getElementById('input').innerHTML = "Cancel"
   if(picking == false){
     document.getElementById('input').innerHTML = "Set input"
     picking = true;
-    document.getElementById('tab').style.backgroundColor = '#B6B6B6';
+    var i = 0;
+    buttons.item(0).style.backgroundColor = '#B6B6B6'
+    while(i<buttons.length){
+    buttons.item(i).style.backgroundColor = '#B6B6B6';
+    i++;
+    }
   }else{
     picking = false;
-    document.getElementById('tab').style.backgroundColor = '#183985';
+    var i = 0;
+    buttons.item(0).style.backgroundColor = '#183985'
+    while(i<buttons.length){
+    buttons.item(i).style.backgroundColor = '#183985';
+    i++;
+    }
   }
 // get tab which input is coming from
 
@@ -1139,7 +1185,7 @@ function create(){
    tabs.push([true,true,name,0,'',global2]);
   
 let list = document.getElementById("files").innerHTML;
-  list+="<li><button onclick = 'tab("+ (tabs.length - 1) +")' id ='tab'>"+name+"</button></li>";
+  list+="<li><button onclick = 'tab("+ (tabs.length - 1) +")' id ='tab' name='tab'>"+name+"</button></li>";
     document.getElementById("files").innerHTML = list;
   console.log(tabs[0][2])
   const link = document.getElementById('filepicker');
@@ -1165,7 +1211,7 @@ function create2(){
     tabs[tabs.length-1][5][3] = '';
    }
 let list = document.getElementById("functions").innerHTML;
-  list+="<li><button onclick = 'tab("+ (tabs.length - 1) +")' id ='tab'>"+name+"</button></li>";
+  list+="<li><button onclick = 'tab("+ (tabs.length - 1) +")' id ='tab' name='tab'>"+name+"</button></li>";
     document.getElementById("functions").innerHTML = list;
   const link = document.getElementById('functionpicker');
   link.style.visibility = 'hidden';
@@ -1188,16 +1234,16 @@ if(type == 0){
   var i2 = 0;
   var up = true;
   while(i<length){
-if(i2>freq/2){
+if(i2>freq){
   up = false;
 }else if(i2<0){
   up = true;
 }
 if(up){
-  i2 += 1/freq;
+  i2 += 1;
   output.push(0);
 }else if(!up){
-  i2 -= 1/freq;
+  i2 -= 1;
   output.push(peak);
   }
   i++
@@ -1208,31 +1254,38 @@ if(type == 1){
   var i2 = 0;
   var up = true;
   while(i<length){
-if(i2>freq/2){
+if(i2>peak){
   up = false;
 }else if(i2<0){
   up = true;
 }
 if(up){
-  i2 += 1/freq;
+  i2 += peak/freq;
 }else if(!up){
-  i2 -= 1/freq;
+  i2 -= peak/freq;
   }
-  output.push((i2/freq)*peak);
+  output.push(i2);
   i++
 }
 }
 if(type == 2){
   var i = 0;
   var i2 = 0;
+  var up = true;
   while(i<length){
-if(i2>freq){
-  i2 = 0;
+if(i2>peak){
+  up = false;
+}else if(i2<0){
+  up = true;
 }
-output.push((i2/freq)*peak)
-i ++;
-i2 += 1/freq;
+if(up){
+  i2 += peak/freq;
+}else if(!up){
+  i2 -= peak/freq;
   }
+  output.push(i2);
+  i++
+}
 }
 if(type == 3){
   var i = 0;
@@ -1358,7 +1411,6 @@ tabfiles[global] = ['']
       let filedata = tabfiles[global];
     console.log("tabdata", tabdata);
     const filer = document.getElementById("filer");
-    //
 if(tabs[numb][3] == 3){
         console.log('tabfiles:', defaul(numb, 1, 0))
         filer.innerHTML = String('<label for="wavePlace" name="label0">Wave place</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><label for="waveType" name="label0">Options</label><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Square wave</option><option value="1" ' + defaul(numb, 0, 1) + '>Triangle wave</option><option value="2" ' + defaul(numb, 0, 2) + '>Rising edge sawtooth wave</option><option value="3" ' + defaul(numb, 0, 3) + '>Falling edge sawtooth wave</option><option value="4" ' + defaul(numb, 0, 4) + '>Sine wave</option><option value="5" ' + defaul(numb, 0, 5) + '>Straight line</option><option value="6" ' + defaul(numb, 0, 6) + '>Noise</option><option value="7" ' + defaul(numb, 0, 7) + '>Exponential function</option></select><label for="waveFreq" name="label0">Frequency 1-0.01</label><input type="range" min="1" max="100" value="' + defaul(numb, 1, 0) + '" id="waveFreq"><label for="waveLength" name="label0">Length 1-10000</label><input type="range" min="1" max="10000" value="' + defaul(numb, 2, 3) + '" id="waveLength"><label for=wavePeak" name="label0">Maximum wave value 1-100</label><input type="range" min="1" max="100" value="' + defaul(numb, 2, 2) + '" id="wavePeak">');
@@ -1426,10 +1478,22 @@ if(tabs[numb][3] == 3){
         if(picking == false){
           document.getElementById('in1').innerHTML = "Input"
           picking = true;
-          document.getElementById('tab').style.backgroundColor = '#B6B6B6';
+          var i = 0;
+          const buttons = document.getElementsByName('tab');
+          buttons.item(0).style.backgroundColor = '#B6B6B6'
+          while(i<buttons.length){
+          buttons.item(i).style.backgroundColor = '#B6B6B6';
+          i++;
+          }
         }else{
           picking = false;
-          document.getElementById('tab').style.backgroundColor = '#183985';
+          var i = 0;
+          const buttons = document.getElementsByName('tab');
+          buttons.item(0).style.backgroundColor = '#183985'
+          while(i<buttons.length){
+          buttons.item(i).style.backgroundColor = '#183985';
+          i++;
+          }
         }
   })
   document.getElementById('in2').addEventListener('click', function(){
@@ -1438,10 +1502,22 @@ if(tabs[numb][3] == 3){
     if(picking == false){
       document.getElementById('in2').innerHTML = "Input"
       picking = true;
-      document.getElementById('tab').style.backgroundColor = '#B6B6B6';
+      var i = 0;
+      const buttons = document.getElementsByName('tab');
+      buttons.item(0).style.backgroundColor = '#B6B6B6'
+      while(i<buttons.length){
+      buttons.item(i).style.backgroundColor = '#B6B6B6';
+      i++;
+      }
     }else{
       picking = false;
-      document.getElementById('tab').style.backgroundColor = '#183985';
+      var i = 0;
+      const buttons = document.getElementsByName('tab');
+      buttons.item(0).style.backgroundColor = '#183985'
+      while(i<buttons.length){
+      buttons.item(i).style.backgroundColor = '#183985';
+      i++;
+      }
     }
 })
 }else if(tabs[numb][3] == 6){
@@ -1481,10 +1557,22 @@ if(tabs[numb][3] == 3){
       if(picking == false){
         document.getElementById('in1').innerHTML = "Input"
         picking = true;
-        document.getElementById('tab').style.backgroundColor = '#B6B6B6';
+        var i = 0;
+        const buttons = document.getElementsByName('tab');
+        buttons.item(0).style.backgroundColor = '#B6B6B6'
+        while(i<buttons.length){
+        buttons.item(i).style.backgroundColor = '#B6B6B6';
+        i++;
+        }
       }else{
         picking = false;
-        document.getElementById('tab').style.backgroundColor = '#183985';
+        var i = 0;
+        const buttons = document.getElementsByName('tab');
+        buttons.item(0).style.backgroundColor = '#183985'
+        while(i<buttons.length){
+        buttons.item(i).style.backgroundColor = '#183985';
+        i++;
+        }
       }
 })
 document.getElementById('in2').addEventListener('click', function(){
@@ -1493,10 +1581,22 @@ document.getElementById('in2').addEventListener('click', function(){
   if(picking == false){
     document.getElementById('in2').innerHTML = "Input"
     picking = true;
-    document.getElementById('tab').style.backgroundColor = '#B6B6B6';
+    var i = 0;
+    const buttons = document.getElementsByName('tab');
+    buttons.item(0).style.backgroundColor = '#B6B6B6'
+    while(i<buttons.length){
+    buttons.item(i).style.backgroundColor = '#B6B6B6';
+    i++;
+    }
   }else{
     picking = false;
-    document.getElementById('tab').style.backgroundColor = '#183985';
+    var i = 0;
+    const buttons = document.getElementsByName('tab');
+    buttons.item(0).style.backgroundColor = '#183985'
+    while(i<buttons.length){
+    buttons.item(i).style.backgroundColor = '#183985';
+    i++;
+    }
   }
 })
 }else if(tabs[numb][3] == 11){
@@ -1521,7 +1621,7 @@ document.getElementById('in2').addEventListener('click', function(){
    tabs[numb][5][1] = document.getElementById('text').value;
   })
 }else if(tabs[numb][3] == 8){
-  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Fourier transform</option><option value="1" ' + defaul(numb, 0, 1) + '>Mellin transform</option><option value="2" ' + defaul(numb, 0, 2) + '>Hartley transform</option><option value="3" ' + defaul(numb, 0, 3) + '>Inverse fourier transform</option><option value="4" ' + defaul(numb, 0, 4) + '>Inverse mellin transform</option></select>');
+  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Fourier transform</option><option value="1" ' + defaul(numb, 0, 1) + '>Inverse fourier transform</option><option value="2" ' + defaul(numb, 0, 2) + '>Hartley transform</option></select>');
   console.log('type', tabs[numb][3])
   document.getElementById('waveType').addEventListener('change', function(){
           tabs[numb][5][1] = document.getElementById('waveType').value;

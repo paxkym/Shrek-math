@@ -50,6 +50,8 @@ html, body {
     position: relative;
   right: -230px;
   top: -2030px;
+  border: 2px solid #007B99;
+  border-radius: 4px;
 }
   #inwave {
         position: relative;
