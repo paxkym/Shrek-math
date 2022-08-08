@@ -1227,8 +1227,8 @@ function customWave(tab){
 const freq = tabs[tab][5][0];
 const type = tabs[tab][5][1];
 const peak = tabs[tab][5][2];
-const length = tabs[tab][5][3];
-var output =[];
+const length = tabs[tab][5][3] - 1;
+var output =[0];
 if(type == 0){
   var i = 0;
   var i2 = 0;
@@ -1275,13 +1275,13 @@ if(type == 2){
   while(i<length){
 if(i2>peak){
   up = false;
-}else if(i2<0){
+}else if(i2 <= 0){
   up = true;
 }
 if(up){
-  i2 += peak/freq;
+  i2 += (peak/freq)/2;
 }else if(!up){
-  i2 -= peak/freq;
+  i2 = 0;
   }
   output.push(i2);
   i++
@@ -1289,15 +1289,22 @@ if(up){
 }
 if(type == 3){
   var i = 0;
-  var i2 = 0;
+  var i2 = peak;
+  var up = true;
   while(i<length){
-if(i2>freq){
-  i2 = 0;
+if(i2>peak){
+  up = false;
+}else if(i2 <= 0){
+  up = true;
 }
-output.push(peak - ((i2/freq)*peak))
-i ++;
-i2 += 1/freq;
+if(up){
+  i2 -= (peak/freq)/2;
+}else if(!up){
+  i2 = peak;
   }
+  output.push(i2);
+  i++
+}
 }
 if(type == 4){
   var i = 0;
