@@ -6,11 +6,13 @@ const pi = 3.14159;
 const e = 2.71828;
 var global;
 var global3;
+var existingfile = false;
 var globalfunctiontype;
 var tabs = [];
 var picking = true;
   let global2;
 let filehandle;
+var globalar = "";
 var constmax = 10000;
 var settings = [false, [], 600, 10000];
 var itr = 0;
@@ -80,7 +82,6 @@ function integral(wave){
    output += (wave[i]);
        i++;
   }
-  console.log(output[2],output[1],output[0], 'dsdsds')
   return(output);
 }
 function fourier(real){
@@ -425,11 +426,12 @@ function file2wave(fil){
       var wave = [];
   const reader = new FileReader()
   reader.onload = function () {
-          result = reader.result;
+         const result = reader.result;
 const out = new Int8Array(result.slice(404))
     global2 = ((Array.from(out)))
     }
       reader.readAsArrayBuffer(fil.files[0])
+      console.log(global2)
       return(global2)
 }
 function defaul(tab, type, value){
@@ -515,6 +517,9 @@ function arith(tab){
   var output = [];
     input1 = tabfiles[tabs[tab][5][2]];
     input2 = tabfiles[tabs[tab][5][3]];
+    if(!input1 || !input2){
+      return;
+    }
   var max = input1.length;
   if(input1 < input2){
     max = input2.length;
@@ -694,7 +699,6 @@ function calc(tab, file){
        i++;
        } 
         }
-          console.log(output, file, 'slime')
     return(output)
 }
 function misc(tab, file){
@@ -841,7 +845,6 @@ function trig(tab, file){
                     i++;
                     }
                      }
-         console.log(output, file, 'slime')
    return(output)
 }
 function transf(tab, file){
@@ -1001,7 +1004,6 @@ function statistic(tab, file){
 output.push(out);
 i++;
           };
-          console.log(output, file, 'slime')
     return(output)
 }
 function setTheme(){
@@ -1122,8 +1124,8 @@ document.getElementById('settings').addEventListener('click', function(){
 })
 const input = document.getElementById('fileInput');
 input.addEventListener('change', function (e) {
-  ctx.clearRect(0, 0, c.width, c.height);
 global2 = (file2wave(input));
+console.log(global2)
 }, false)
 document.getElementById('input').addEventListener('click', async function(){
   globalfunctiontype = 0;
@@ -1181,13 +1183,11 @@ function create(){
               alert('Tabs cannot have identical names!')
               return
             }
-    console.log(global2)
    tabs.push([true,true,name,0,'',global2]);
   
 let list = document.getElementById("files").innerHTML;
   list+="<li><button onclick = 'tab("+ (tabs.length - 1) +")' id ='tab' name='tab'>"+name+"</button></li>";
     document.getElementById("files").innerHTML = list;
-  console.log(tabs[0][2])
   const link = document.getElementById('filepicker');
   link.style.visibility = 'hidden';
   tab(tabs.length)
@@ -1204,7 +1204,6 @@ function create2(){
               alert('Tabs cannot have identical names!')
               return
             }
-    console.log(name)
    tabs.push([true,false,name,document.getElementById('functionType').value,'0',[1,0,0,0,0,0]]);
    if(document.getElementById('functionType').value == 7){
     tabs[tabs.length-1][5][2] = '';
@@ -1290,16 +1289,10 @@ if(up){
 if(type == 3){
   var i = 0;
   var i2 = peak;
-  var up = true;
   while(i<length){
-if(i2>peak){
-  up = false;
-}else if(i2 <= 0){
-  up = true;
-}
-if(up){
+if(i2 >= 0){
   i2 -= (peak/freq)/2;
-}else if(!up){
+}else if(i2 <= 0){
   i2 = peak;
   }
   output.push(i2);
@@ -1339,20 +1332,6 @@ if(type == 6){
     i2++;
   }
 }
-if(type == 7){
-  var i = 0;
-  var out = 0;
-  while(i<length){
-out = Math.floor(Math.E**(i/freq));
-if(out != 'Infinity'){
-    output.push(out);
-}else{
-  break;
-}
-    i++;
-  }
-}
-console.log('   gdsdsdds', output)
 return output;
 }
 function close(){ 
@@ -1361,9 +1340,16 @@ document.getElementById('functionpicker').style.visibility = 'hidden';
 document.getElementById('filer').innerHTML = '';
 }
 function tab(numb){
+  const buttons = document.getElementsByName('tab');
+  var i = 0;
+  while(i<buttons.length){
+  buttons.item(i).style = "#tab:hover{background-color: #242424;color: white;}";
+  i++;
+  }
+  "#tab:hover{background-color: #242424;color: white;}"
   // decides if picking or using tab
   if(picking){
-
+close()
     if(tabs[numb][1] || tabs[numb][3] == 3 || tabs[numb][3] == 10 || tabs[numb][3] == 9 || tabs[numb][3] == 7){
       document.getElementById('input').style.display = 'none';
     }else{
@@ -1420,7 +1406,7 @@ tabfiles[global] = ['']
     const filer = document.getElementById("filer");
 if(tabs[numb][3] == 3){
         console.log('tabfiles:', defaul(numb, 1, 0))
-        filer.innerHTML = String('<label for="wavePlace" name="label0">Wave place</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><label for="waveType" name="label0">Options</label><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Square wave</option><option value="1" ' + defaul(numb, 0, 1) + '>Triangle wave</option><option value="2" ' + defaul(numb, 0, 2) + '>Rising edge sawtooth wave</option><option value="3" ' + defaul(numb, 0, 3) + '>Falling edge sawtooth wave</option><option value="4" ' + defaul(numb, 0, 4) + '>Sine wave</option><option value="5" ' + defaul(numb, 0, 5) + '>Straight line</option><option value="6" ' + defaul(numb, 0, 6) + '>Noise</option><option value="7" ' + defaul(numb, 0, 7) + '>Exponential function</option></select><label for="waveFreq" name="label0">Frequency 1-0.01</label><input type="range" min="1" max="100" value="' + defaul(numb, 1, 0) + '" id="waveFreq"><label for="waveLength" name="label0">Length 1-10000</label><input type="range" min="1" max="10000" value="' + defaul(numb, 2, 3) + '" id="waveLength"><label for=wavePeak" name="label0">Maximum wave value 1-100</label><input type="range" min="1" max="100" value="' + defaul(numb, 2, 2) + '" id="wavePeak">');
+        filer.innerHTML = String('<label for="wavePlace" name="label0">Scroll</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><label for="waveType" name="label0">Options</label><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Square wave</option><option value="1" ' + defaul(numb, 0, 1) + '>Triangle wave</option><option value="2" ' + defaul(numb, 0, 2) + '>Rising edge sawtooth wave</option><option value="3" ' + defaul(numb, 0, 3) + '>Falling edge sawtooth wave</option><option value="4" ' + defaul(numb, 0, 4) + '>Sine wave</option><option value="5" ' + defaul(numb, 0, 5) + '>Straight line</option><option value="6" ' + defaul(numb, 0, 6) + '>Noise</option></select><label for="waveFreq" name="label0" id="lwf">Frequency 1-0.01</label><input type="range" min="1" max="100" value="' + defaul(numb, 1, 0) + '" id="waveFreq"><label for="waveLength" name="label0" id="lwl">Length 1-10000</label><input type="range" min="1" max="10000" value="' + defaul(numb, 2, 3) + '" id="waveLength"><label for=wavePeak" name="label0" id="lwp">Maximum wave value 1-100</label><input type="range" min="1" max="100" value="' + defaul(numb, 2, 2) + '" id="wavePeak">');
         console.log('type', tabs[numb][3])
         document.getElementById('waveFreq').addEventListener('change', function(){
           var i = 0;
@@ -1432,12 +1418,18 @@ if(tabs[numb][3] == 3){
             }
             i++
           }
+          process();
+          document.getElementById('lwf').innerHTML = ("Frequency: " + String((0.001 * Math.ceil(1000 / parseInt(document.getElementById('waveFreq').value))).toFixed(3)))
         })
         document.getElementById('wavePeak').addEventListener('change', function(){
+          document.getElementById('lwp').innerHTML = ("Maximum wave value: " + String(document.getElementById('wavePeak').value))
                 tabs[numb][5][2] = parseFloat(document.getElementById('wavePeak').value);
+                process();
         })
         document.getElementById('waveLength').addEventListener('change', function(){
           tabs[numb][5][3] = document.getElementById('waveLength').value;
+          document.getElementById('lwl').innerHTML = ("Length: " + String(document.getElementById('waveLength').value))
+          process();
   })
         document.getElementById('waveType').addEventListener('change', function(){
           var output = [];
@@ -1451,10 +1443,11 @@ if(tabs[numb][3] == 3){
             }
             i++
           }
+          process()
           })
 }else if(tabs[numb][3] == 4){
       console.log('tabfiles:', defaul(numb, 1, 0))
-      filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Sine</option><option value="1" ' + defaul(numb, 0, 1) + '>Cosine</option><option value="2" ' + defaul(numb, 0, 2) + '>Tangeant</option><option value="3" ' + defaul(numb, 0, 3) + '>Sinc</option><option value="4" ' + defaul(numb, 0, 4) + '>Hyperbolic sine</option><option value="5" ' + defaul(numb, 0, 5) + '>Hyperbolic cosine</option><option value="6" ' + defaul(numb, 0, 6) + '>Hyperbolic tangent</option><option value="7" ' + defaul(numb, 0, 7) + '>Secant</option><option value="8" ' + defaul(numb, 0, 8) + '>Cosecant</option><option value="9" ' + defaul(numb, 0, 9) + '>Cotangeant</option></select>');
+      filer.innerHTML = String('<label for="wavePlace" name="label0">Scroll</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><label for="waveType" name="label0">Options</label><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Sine</option><option value="1" ' + defaul(numb, 0, 1) + '>Cosine</option><option value="2" ' + defaul(numb, 0, 2) + '>Tangeant</option><option value="3" ' + defaul(numb, 0, 3) + '>Sinc</option><option value="4" ' + defaul(numb, 0, 4) + '>Hyperbolic sine</option><option value="5" ' + defaul(numb, 0, 5) + '>Hyperbolic cosine</option><option value="6" ' + defaul(numb, 0, 6) + '>Hyperbolic tangent</option><option value="7" ' + defaul(numb, 0, 7) + '>Secant</option><option value="8" ' + defaul(numb, 0, 8) + '>Cosecant</option><option value="9" ' + defaul(numb, 0, 9) + '>Cotangeant</option></select>');
       console.log('type', tabs[numb][3])
       document.getElementById('waveType').addEventListener('change', function(){
         var output = [];
@@ -1468,16 +1461,19 @@ if(tabs[numb][3] == 3){
           }
           i++
         }
+        process();
         })
 }else if(tabs[numb][3] == 10){
-    filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><textarea placeholder="Type a number. For specialized constants like π or e, type in the values: PI, E, PHI, SQ2, LN2" id="setConst">' + defaul(numb, 1, 0) + '</textarea>');
+    filer.innerHTML = String('<label for="wavePlace" name="label0">Scroll</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><label for="setConst" name="label0">Constant</label><textarea placeholder="Type a number. For specialized constants like π or e, type in the values: PI, E, PHI, SQ2, LN2" id="setConst">' + defaul(numb, 1, 0) + '</textarea>');
     document.getElementById('setConst').addEventListener('change', function(){
             tabs[numb][5][0] = document.getElementById('setConst').value;
+            process();
       })
 }else if(tabs[numb][3] == 7){
-    filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><button id="in1">Input</button><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>+</option><option value="1" ' + defaul(numb, 0, 1) + '>-</option><option value="2" ' + defaul(numb, 0, 2) + '>&times</option><option value="3" ' + defaul(numb, 0, 3) + '>&divide</option><option value="4" ' + defaul(numb, 0, 4) + '>^</option><option value="5" ' + defaul(numb, 0, 5) + '>&#8730</option><option value="6" ' + defaul(numb, 0, 6) + '>log</option></select><button id="in2">Input</button>');
+    filer.innerHTML = String('<label for="wavePlace" name="label0">Scroll</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><label for="in1" name="label0">Options</label><button id="in1">Input</button><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>+</option><option value="1" ' + defaul(numb, 0, 1) + '>-</option><option value="2" ' + defaul(numb, 0, 2) + '>&times</option><option value="3" ' + defaul(numb, 0, 3) + '>&divide</option><option value="4" ' + defaul(numb, 0, 4) + '>^</option><option value="5" ' + defaul(numb, 0, 5) + '>&#8730</option><option value="6" ' + defaul(numb, 0, 6) + '>log</option></select><button id="in2">Input</button>');
     document.getElementById('waveType').addEventListener('change', function(){
             tabs[numb][5][1] = document.getElementById('waveType').value;
+            process()
       })
       document.getElementById('in1').addEventListener('click', function(){
         globalfunctiontype = 1;
@@ -1502,6 +1498,7 @@ if(tabs[numb][3] == 3){
           i++;
           }
         }
+        process();
   })
   document.getElementById('in2').addEventListener('click', function(){
     globalfunctiontype = 2;
@@ -1526,9 +1523,10 @@ if(tabs[numb][3] == 3){
       i++;
       }
     }
+    process();
 })
 }else if(tabs[numb][3] == 6){
-    filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Derivative</option><option value="1" ' + defaul(numb, 0, 1) + '>Integral</option><option value="2" ' + defaul(numb, 0, 2) + '>Antiderivative</option></select>');
+    filer.innerHTML = String('<label for="wavePlace" name="label0">Scroll</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Derivative</option><option value="1" ' + defaul(numb, 0, 1) + '>Integral</option><option value="2" ' + defaul(numb, 0, 2) + '>Antiderivative</option></select>');
     console.log('type', tabs[numb][3])
     document.getElementById('waveType').addEventListener('change', function(){
       var output = [];
@@ -1542,9 +1540,10 @@ if(tabs[numb][3] == 3){
         }
         i++
       }
+      process();
       })
 }else if(tabs[numb][3] == 9){
-  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><button id="in1">Input</button><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>=</option><option value="1" ' + defaul(numb, 0, 1) + '><</option><option value="2" ' + defaul(numb, 0, 2) + '>OR</option><option value="3" ' + defaul(numb, 0, 3) + '>AND</option><option value="4" ' + defaul(numb, 0, 4) + '>NOT</option><option value="5" ' + defaul(numb, 0, 5) + '>NOR</option><option value="6" ' + defaul(numb, 0, 6) + '>NAND</option><option value="7" ' + defaul(numb, 0, 7) + '>XOR</option><option value="8" ' + defaul(numb, 0, 8) + '>XNOR</option></select><button id="in2">Input</button>');
+  filer.innerHTML = String('<label for="wavePlace" name="label0">Scroll</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><button id="in1">Input</button><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>=</option><option value="1" ' + defaul(numb, 0, 1) + '><</option><option value="2" ' + defaul(numb, 0, 2) + '>OR</option><option value="3" ' + defaul(numb, 0, 3) + '>AND</option><option value="4" ' + defaul(numb, 0, 4) + '>NOT</option><option value="5" ' + defaul(numb, 0, 5) + '>NOR</option><option value="6" ' + defaul(numb, 0, 6) + '>NAND</option><option value="7" ' + defaul(numb, 0, 7) + '>XOR</option><option value="8" ' + defaul(numb, 0, 8) + '>XNOR</option></select><button id="in2">Input</button>');
   if(4 == tabs[numb][5][1]){
     document.getElementById('in2').disabled = true;
   }else{
@@ -1557,6 +1556,7 @@ if(tabs[numb][3] == 3){
           }else{
             document.getElementById('in2').disabled = false;
           }
+          process();
     })
     document.getElementById('in1').addEventListener('click', function(){
       globalfunctiontype = 1;
@@ -1581,6 +1581,7 @@ if(tabs[numb][3] == 3){
         i++;
         }
       }
+      process();
 })
 document.getElementById('in2').addEventListener('click', function(){
   globalfunctiontype = 2;
@@ -1605,9 +1606,10 @@ document.getElementById('in2').addEventListener('click', function(){
     i++;
     }
   }
+  process();
 })
 }else if(tabs[numb][3] == 11){
-  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Mean</option><option value="1" ' + defaul(numb, 0, 1) + '>Mode</option><option value="2" ' + defaul(numb, 0, 2) + '>Median</option><option value="3" ' + defaul(numb, 0, 3) + '>Standard deviation</option><option value="4" ' + defaul(numb, 0, 4) + '>Skewness</option><option value="5" ' + defaul(numb, 0, 5) + '>Kurtosis</option></select>');
+  filer.innerHTML = String('<label for="wavePlace" name="label0">Scroll</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Mean</option><option value="1" ' + defaul(numb, 0, 1) + '>Mode</option><option value="2" ' + defaul(numb, 0, 2) + '>Median</option><option value="3" ' + defaul(numb, 0, 3) + '>Standard deviation</option><option value="4" ' + defaul(numb, 0, 4) + '>Skewness</option><option value="5" ' + defaul(numb, 0, 5) + '>Kurtosis</option></select>');
   console.log('type', tabs[numb][3])
   document.getElementById('waveType').addEventListener('change', function(){
     var output = [];
@@ -1621,24 +1623,27 @@ document.getElementById('in2').addEventListener('click', function(){
       }
       i++
     }
+    process();
     })
 }else if(tabs[numb][3] == 12){
-  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><textarea rows="10" cols="40" placeholder="Type the function in JavaScript. The object named -io- contains the function input (-io.input-), and should have the function output placed in -io.output-. Please be careful when creating functions, as they make use of the JavaScript eval function. Infinite loops, and variables with identical names to program variables may cause error." id="text">' + defaul(numb, 2, 1) + '</textarea>');
+  filer.innerHTML = String('<label for="wavePlace" name="label0">Scroll</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><textarea rows="10" cols="40" placeholder="Type the function in JavaScript. The object named -io- contains the function input (-io.input-), and should have the function output placed in -io.output-. Please be careful when creating functions, as they make use of the JavaScript eval function. Infinite loops, and variables with identical names to program variables may cause error." id="text">' + defaul(numb, 2, 1) + '</textarea>');
   document.getElementById('text').addEventListener('input', function(){
    tabs[numb][5][1] = document.getElementById('text').value;
   })
 }else if(tabs[numb][3] == 8){
-  filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Fourier transform</option><option value="1" ' + defaul(numb, 0, 1) + '>Inverse fourier transform</option><option value="2" ' + defaul(numb, 0, 2) + '>Hartley transform</option></select>');
+  filer.innerHTML = String('<label for="wavePlace" name="label0">Scroll</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Fourier transform</option><option value="1" ' + defaul(numb, 0, 1) + '>Inverse fourier transform</option><option value="2" ' + defaul(numb, 0, 2) + '>Hartley transform</option></select>');
   console.log('type', tabs[numb][3])
   document.getElementById('waveType').addEventListener('change', function(){
           tabs[numb][5][1] = document.getElementById('waveType').value;
+          process();
     })
 }else if(tabs[numb][3] == 5){
       console.log('tabfiles:', defaul(numb, 1, 0))
-      filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Floor</option><option value="1" ' + defaul(numb, 0, 1) + '>Ceiling</option><option value="2" ' + defaul(numb, 0, 2) + '>Absolute</option><option value="3" ' + defaul(numb, 0, 3) + '>Gamma</option><option value="4" ' + defaul(numb, 0, 4) + '>Zeta</option><option value="5" ' + defaul(numb, 0, 5) + '>Square root</option></select>');
+      filer.innerHTML = String('<label for="wavePlace" name="label0">Scroll</label><input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace"><select id="waveType" ><option value="0" ' + defaul(numb, 0, 0) + '>Floor</option><option value="1" ' + defaul(numb, 0, 1) + '>Ceiling</option><option value="2" ' + defaul(numb, 0, 2) + '>Absolute</option><option value="3" ' + defaul(numb, 0, 3) + '>Gamma</option><option value="4" ' + defaul(numb, 0, 4) + '>Zeta</option><option value="5" ' + defaul(numb, 0, 5) + '>Square root</option></select>');
       console.log('type', tabs[numb][3])
       document.getElementById('waveType').addEventListener('change', function(){
               tabs[numb][5][1] = document.getElementById('waveType').value;
+              process();
         })
 }else{  
 filer.innerHTML = String('<input type="range" min="1" max="' + filedata.length + '" value="50" id="WavePlace">');
@@ -1701,8 +1706,13 @@ var output = [];
   }
   console.log(tabfiles);
 }else if(!picking){
-  document.getElementById('tab').style.backgroundColor = '#B6B6B6';
+  const buttons = document.getElementsByName('tab');
   var i = 0;
+  while(i<buttons.length){
+  buttons.item(i).style.backgroundColor = '#B6B6B6';
+  i++;
+  }
+   i = 0;
   var opentab;
   // find the tab which is open
   while(i<tabs.length){
@@ -1732,40 +1742,28 @@ setTheme();
 function process(){
   tabfiles = [];
   var i = 0;
-  var files = [];
   while(i<tabs.length){
     if(tabs[i][1]){
-      files.push(tabs[i]);
+      tabfiles.push(tabs[i][5]);
+    }else if(tabs[i][3] == 10){
+      tabfiles.push(constfunc(i));
+    }else if(tabs[i][3] == 3){
+      tabfiles.push(customWave(i));
     }else{
-      files.push([]);
+      tabfiles.push([]);
     }
-          i++;
-  }
-     i = 0;
-  while(i<tabs.length){
-if(tabs[i] == files[i]){
-  tabfiles.push(files[i][5])
-}else{
-  tabfiles.push(['']);
-}
           i++;
   }
   i = 0;
   var i2 = 0;
-  while(i2<10){
+  while(i2<tabs.length){
+    i = 0;
  while(i<tabs.length){
 var file = tabfiles[tabs[i][4]];
-   console.log("file", file, i)
    const doneFunction = tabs[i][3];
 if(!tabs[i][1]){
-   if(doneFunction == 3){
-    tabfiles[i] = customWave(i);
-  }
   if(doneFunction == 4){
     tabfiles[i] = trig(i, file)
-  }
-  if(doneFunction == 10){
-    tabfiles[i] = constfunc(i)
   }
   if(doneFunction == 7){
     tabfiles[i] = arith(i)
@@ -1794,6 +1792,168 @@ if(!tabs[i][1]){
 i2++
 }
 }
+async function openProject(){
+function decode(file){
+  if(file[file.length - 1] != '∂'){
+    file += ('∂')
+  }
+var i4 = 0;
+var i3 = 0;
+var i2 = 0;
+var i = 0;
+let temptext = "";
+var temptype = "";
+var temparray = [];
+var tempdata = [];
+var final = [];
+while(i4 < 1){
+  tempdata = []
+  temparray = []
+while(file[i] != '∂'){
+  i++;
+}
+i++;
+console.log(i, file[i], 'file')
+while(file[i] != 'å' || i < 30){
+temptext += file[i];
+i++;
+console.log(file[i], 'dsddsd')
+}
+i++;
+if(temptext == "true"){
+  temparray.push(true);
+}else{
+  temparray.push(false);
+}
+temptext = "";
+while(file[i] != 'å'){
+  temptext += file[i];
+  i++;
+  }
+  i++
+  if(temptext == "true"){
+    temparray.push(true);
+  }else{
+    temparray.push(false);
+  }
+temptext = "";
+  while(file[i] != 'å'){
+    temptext += file[i];
+    i++;
+    }
+    i++
+    temparray.push(temptext);
+  temptext = "";
+    while(file[i] != 'å'){
+      temptext += file[i];
+      i++;
+      }
+      i++
+      temparray.push(parseInt(temptext));
+    temptext = "";
+      while(file[i] != 'å'){
+        temptext += file[i];
+        i++;
+        }
+        i++;
+        temparray.push(parseInt(temptext));
+        temptext = "";
+          while(file[i] != '∂'){
+            temptext += file[i];
+            i++;
+            }
+            temptype = "";
+            tempdata = [];
+if(!temparray[1]){
+i2 = 0;
+i3 = 0;
+while(i2<6){
+while(temptext[i3] != 'ß'){
+  temptype += temptext[i3];
+  i3++;
+  }
+  i3++;
+tempdata.push(temptype)
+temptype = "";
+i2++
+}
+temparray.push(tempdata)
+}
+if(temparray[1]){
+  i2 = 0;
+  i3 = 0;
+  while(i2 < temptext.split('ß').length - 1){
+  while(temptext[i3] != 'ß'){
+    temptype += temptext[i3];
+    i3++;
+    }
+    i3++;
+  tempdata.push(temptype)
+  temptype = "";
+  i2++
+  }
+  temparray.push(tempdata)
+  }
+final.push(temparray)
+console.log(temparray, i, temptext)
+i4++;
+}
+return(final)
+}
+var [filehandle] = await window.showOpenFilePicker()
+  let filedata = await filehandle.getFile(); 
+await filedata.text().then(result => {
+       tabs = decode(result);
+  })
+console.log(decode(globalar))
+}
+async function save(){
+ const options = {
+      types: [
+        {
+          description: "Project file",
+          accept: {
+            "text/plain": [".txt"],
+          },
+        },
+      ],
+    };
+    
+    const handle = await window.showSaveFilePicker(options);
+    const writable = await handle.createWritable();
+   function encode(){
+    var i2 = 0
+    var i = 0
+    var text = ""
+    while(i2<tabs.length){
+      text += ('∂')
+      text += (tabs[i2][0])
+      text += ('å')
+      text += (tabs[i2][1])
+      text += ('å')
+      text += (tabs[i2][2])
+      text += ('å')
+      text += (tabs[i2][3])
+      text += ('å')
+      text += (tabs[i2][4])
+      text += ('å')
+      i = 0;
+      while(i<tabs[i2][5].length){
+        text += (tabs[i2][5][i])
+        text += ('ß')
+        i++
+      }
+      i2++;
+    }
+    text += '∂'
+    console.log(text)
+    return(text);
+  }
+    await writable.write(encode());
+    await writable.close();
+    existingfile = true;
+}
 function delet(){
   process();
+  console.log(tabs)
 }
