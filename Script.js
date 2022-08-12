@@ -6,6 +6,7 @@ const pi = 3.14159;
 const e = 2.71828;
 var global;
 var global3;
+var globalhandle;
 var existingfile = false;
 var globalfunctiontype;
 var tabs = [];
@@ -46,7 +47,7 @@ var outwave = new Chart("outwave", {
     title: {
       display: true,
       fontSize: 16
-    }
+    },
   }
 });
 var inwave = new Chart("inwave", {
@@ -1045,7 +1046,7 @@ await filedata.text().then(result => {
 }
 document.getElementById('settings').addEventListener('click', function(){
   close();
-  filer.innerHTML = '<table><tr><td><h4 style="color:#003826">Quick mode</h4><label class="switch" title="Quick mode will increase the speed of certain functions, but decrease their resolution. This is achieved through a precalculated function table. This process increases boot up time." id="quick"><input type="checkbox"><span class="slider round"></span></label></td><td><select id="theme"><option selected disabled hidden>Theme</option><option value="0">Snow</option><option value="1">Midnight</option><option value="2">Standard</option></select></td><td><h4 style="color:#003826">Graph length</h4><input type="range" id="length" max="1000" min="10"></input></td><td><h4 style="color:#003826">Maximum wave length</h4><input type="range" id="maxlength" max="100000" min="100"></input></td></tr></table>';
+  filer.innerHTML = '<table><tr><td><h4 style="color:#003826">Quick mode</h4><label class="switch" title="Quick mode will increase the speed of certain functions, but decrease their resolution. This is achieved through a precalculated function table. This process increases boot up time." id="quick"><input type="checkbox"><span class="slider round"></span></label></td><td><select id="theme"><option selected disabled hidden>Theme</option><option value="0">Snow</option><option value="1">Midnight</option><option value="2">Standard</option></select></td><td><h4 style="color:#003826">Graph length</h4><input type="range" id="length" max="1000" min="10"></input></td><td><h4 style="color:#003826">Maximum wave length</h4><input type="range" id="maxlength" max="100000" min="100"></input></td><td><li><button onclick = "save(false);" aria-label="Save project as new">Save as new</button></li><li><button onclick = "openProject(false);" aria-label="Open project">Open</button></li><li><button onclick = "save(true);" aria-label="">Save</button></li>'
   document.getElementById('quick').addEventListener('change', function(){
     settings[0] = !settings[0];
   })
@@ -1152,11 +1153,6 @@ document.getElementById('input').addEventListener('click', async function(){
 // get tab which input is coming from
 
 })
-async function write(){
-  const writable = await filehandle.createWritable();
-  await writable.write(contents);
-  await writable.close();
-}
 async function createTab(type){
   close();
   if(type == true){
@@ -1793,8 +1789,10 @@ i2++
 }
 }
 async function openProject(){
-function decode(file){
-  if(file[file.length - 1] != '∂'){
+//get the project file and decode it
+function decode(filein){
+  var file = filein;
+  if(filein[filein.length - 1] != '∂'){
     file += ('∂')
   }
 var i4 = 0;
@@ -1806,18 +1804,17 @@ var temptype = "";
 var temparray = [];
 var tempdata = [];
 var final = [];
-while(i4 < 1){
+while(i4 < file.split('∂').length - 2){
   tempdata = []
   temparray = []
+  temptext = ""
 while(file[i] != '∂'){
   i++;
 }
 i++;
-console.log(i, file[i], 'file')
-while(file[i] != 'å' || i < 30){
+while(file[i] != 'å'){
 temptext += file[i];
 i++;
-console.log(file[i], 'dsddsd')
 }
 i++;
 if(temptext == "true"){
@@ -1895,33 +1892,52 @@ if(temparray[1]){
   temparray.push(tempdata)
   }
 final.push(temparray)
-console.log(temparray, i, temptext)
 i4++;
 }
+process()
 return(final)
 }
-var [filehandle] = await window.showOpenFilePicker()
+const pickerOpts = {
+  types: [
+    {
+      description: 'Project file (stored as text)',
+      accept: {
+        'Text/*': ['.txt']
+      }
+    },
+  ],
+  excludeAcceptAllOption: true,
+  multiple: false
+};
+var [filehandle] = await window.showOpenFilePicker(pickerOpts)
+globalhandle = filehandle;
   let filedata = await filehandle.getFile(); 
 await filedata.text().then(result => {
        tabs = decode(result);
   })
-console.log(decode(globalar))
+  //reset the tabs
+  document.getElementById('files').innerHTML = "<li><button onclick = 'createTab(true);' aria-label='Add file'>+</button></li><li><button onclick = 'delet()' id ='tab' aria-label='Delete file'>Delete</button></li>"
+  document.getElementById('functions').innerHTML = "<li><button onclick = 'createTab(false);' aria-label='Add function'>+</button></li><li><button onclick = 'delet()' id ='tab' aria-label='Delete function'>Delete</button></li>"
+  //add each file tab
+  var i = 0;
+  var list;
+  while(i<tabs.length){
+    if(tabs[i][1]){
+      document.getElementById('files').innerHTML += "<li><button onclick = 'tab("+ i +")' id ='tab' name='tab'>"+tabs[i][2]+"</button></li>";
+    }
+    i++;
+  }
+  i = 0;
+  while(i<tabs.length){
+    if(!tabs[i][1]){
+      document.getElementById('functions').innerHTML += "<li><button onclick = 'tab("+ i +")' id ='tab' name='tab'>"+tabs[i][2]+"</button></li>";
+    }
+    i++;
+  }
+  console.log(tabs)
 }
-async function save(){
- const options = {
-      types: [
-        {
-          description: "Project file",
-          accept: {
-            "text/plain": [".txt"],
-          },
-        },
-      ],
-    };
-    
-    const handle = await window.showSaveFilePicker(options);
-    const writable = await handle.createWritable();
-   function encode(){
+async function save(savetype){
+  function encode(){
     var i2 = 0
     var i = 0
     var text = ""
@@ -1949,9 +1965,41 @@ async function save(){
     console.log(text)
     return(text);
   }
+  if(!savetype){
+ const options = {
+      types: [
+        {
+          description: "Project file",
+          accept: {
+            "text/plain": [".txt"],
+          },
+        },
+      ],
+    };
+    const handle = await window.showSaveFilePicker(options);
+    globalhandle = handle;
+    const writable = await handle.createWritable();
     await writable.write(encode());
     await writable.close();
     existingfile = true;
+  }
+  if(savetype){
+    const options = {
+         types: [
+           {
+             description: "Project file",
+             accept: {
+               "text/plain": [".txt"],
+             },
+           },
+         ],
+       };
+       const handle = globalhandle;
+       const writable = await handle.createWritable();
+       await writable.write(encode());
+       await writable.close();
+       existingfile = true;
+     }
 }
 function delet(){
   process();

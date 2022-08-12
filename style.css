@@ -18,60 +18,57 @@ html, body {
     background-color: #242424;
     color: white;
   }
+
   #functions {
-      position: relative;
     list-style-type: none;
-    right: -70px;
-    top: 200px;
+    margin: -100px;
+    margin-left: -6px;
+    margin-top: -220px;
+    border-style: solid;
+    border-radius: 2px;
+    border-color: #000049;
+    display:inline-table;
+    width: 100px;
   }
   #files {
-      position: relative;
     list-style-type: none;
-    right: 50px;
-    top: -64px;
-  }
-  #line {
-      max-width: 1px;
-      border-left: 1px solid #000049;
-    height: 838px;
-    position: relative;
-    right: -110px;
-    top: -282px;
-  }
-  #line2 {
-      max-width: 1px;
-      border-left: 1px solid #000049;
-    height: 868px;
-    position: relative;
-    right: -230px;
-    top: -1152px;
+    display:inline-table;
+    border-style: solid;
+    border-radius: 2px;
+    border-color: #000049;
+    margin-left: -40px;
+    width: 120px;
   }
   #input {
-    position: relative;
   right: -230px;
   top: -2030px;
   border: 2px solid #007B99;
   border-radius: 4px;
 }
   #inwave {
-        position: relative;
-    right: -232px;
-    top: -1580px;
+    display:relative;
+    margin-right: 200px;
+    margin-top: 20px;
+    left: 20px;
   }
   #outwave {
-        position: relative;
-    right: -232px;
-    top: -1630px;
+    display:relative;
+   margin-left: 200px;
+    margin-top: 20px;
+   left: 20px;
+  }
+  #iocharts{
+    margin-right: -20px;
+    margin-top: 0px;
+    display:table-caption;
   }
   #filepicker {
-          position: relative;
     right: -332px;
     top: -1930px;
      top:110; 
     left:110;
   }
   #functionpicker {
-            position: relative;
     right: -332px;
     top: -1725px;
      top:110; 
@@ -88,7 +85,6 @@ html, body {
     width:200px;
   }
   #settings {
-    position: relative;
   right: -1380px;
   top: -2310px;
 }
@@ -150,4 +146,7 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+#wholecontent{
+  
 }

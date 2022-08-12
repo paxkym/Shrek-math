@@ -8,18 +8,15 @@
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-  <ul id = 'functions'>
-          <li><button onclick = 'createTab(false);' aria-label="Add function">+</button></li>
-      <li><button onclick = 'delet()' id ='tab' aria-label="Delete function">Delete</button></li>
-</ul>
+  <div id = "wholecontent">
     <ul id = 'files'>
-      <li><button onclick = 'save(false);' aria-label="Save project">Save</button></li>
-      <li><button onclick = 'openProject(false);' aria-label="Open project">Open</button></li>
       <li><button onclick = 'createTab(true);' aria-label="Add file">+</button></li>
   <li><button onclick = 'delet()' id ='tab' aria-label="Delete file">Delete</button></li>
-</ul>
-    <div id = 'line'></div>
-      <div id = 'line2'></div>
+  </ul>
+  <ul id = 'functions'>
+    <li><button onclick = 'createTab(false);' aria-label="Add function">+</button></li>
+  <li><button onclick = 'delet()' id ='tab' aria-label="Delete function">Delete</button></li>
+  </ul>
   <div id = 'filer' position="absolute">
 
   </div>
@@ -39,25 +36,22 @@
 </select>
         <button onclick="create2();">Create</button>
         </div>
-        <canvas id="inwave" width="700" height="100" style="border:1px solid #000000;"></canvas>
       <div id = 'filepicker' position="absolute">
             <input type="file" id="fileInput"></input>
 <textarea id = "name">myFile</textarea>
         <button onclick="create();">Create</button>
   </div>
-      <canvas id="outwave" width="700" height="100" style="border:1px solid #000000;"></canvas>
+  <div id = "iocharts">
+  <canvas id="inwave" width="900" height="100" style="border:1px solid #000000;"></canvas>
+      <canvas id="outwave" width="900" height="100" style="border:1px solid #000000;"></canvas>
+    </div>
 <button id="input">
 Set input
 </button>
 <button id="settings">
   <h5>Settings</h5>
   </button>
-<button onclick = "window.getFile();">
-load file
-</button>
-  <button onclick = "window.write();">
-write file
-</button>
+</div>
 <script src="Chartjs.js"></script>
 <script src="tensorflow.js"></script>
       <script src="script.js"></script>
