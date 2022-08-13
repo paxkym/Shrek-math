@@ -40,44 +40,50 @@ html, body {
     width: 120px;
   }
   #input {
-  right: -230px;
-  top: -2030px;
+    position:absolute;
+    right: 932px;
+    top: 338px;
   border: 2px solid #007B99;
   border-radius: 4px;
 }
   #inwave {
-    display:relative;
-    margin-right: 200px;
-    margin-top: 20px;
-    left: 20px;
+    display:absolute;
+  left: 220px;
+    top: -214px;
+    top: -200px;
+    width:fit-content;
   }
   #outwave {
-    display:relative;
-   margin-left: 200px;
-    margin-top: 20px;
-   left: 20px;
+    display:absolute;
+  left: 220px;
+    top: -200px;
+    width:fit-content;
   }
   #iocharts{
-    margin-right: -20px;
-    margin-top: 0px;
+    position:absolute;
+    right: -100px;
+   left: 280px;
+    top: 360px;
+    width:1000px;
     display:table-caption;
   }
   #filepicker {
-    right: -332px;
-    top: -1930px;
-     top:110; 
-    left:110;
+    position:absolute;
+    right: -232px;
+    top: 200px;
+    left:510px;
   }
   #functionpicker {
-    right: -332px;
-    top: -1725px;
-     top:110; 
-    left:110;
+    position:absolute;
+    right: -232px;
+    top: 200px;
+    left:510px;
   }
   #filer {
-              position: relative;
-    right: -332px;
-    top: -1685px;
+    position:absolute;
+    right: -232px;
+    top: 100px;
+    left:510px;
   }
   label{
     background-color: teal;
@@ -85,8 +91,9 @@ html, body {
     width:200px;
   }
   #settings {
-  right: -1380px;
-  top: -2310px;
+    position:absolute;
+    right: 0px;
+    top: 0px;
 }
 .switch {
   position: relative;

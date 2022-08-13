@@ -17,9 +17,15 @@
     <li><button onclick = 'createTab(false);' aria-label="Add function">+</button></li>
   <li><button onclick = 'delet()' id ='tab' aria-label="Delete function">Delete</button></li>
   </ul>
+  <button id="settings" onclick="settings0()">
+    <h5>Settings</h5>
+    </button>
   <div id = 'filer' position="absolute">
 
   </div>
+  <button id="input" onclick="input()">
+    Set input
+    </button>
             <div id = 'functionpicker' position="absolute">
 <textarea id = "name2">myFile</textarea>
            <select id="functionType">
@@ -37,23 +43,16 @@
         <button onclick="create2();">Create</button>
         </div>
       <div id = 'filepicker' position="absolute">
-            <input type="file" id="fileInput"></input>
+            <input type="file" id="fileInput" onclick="fileinput()"></input>
 <textarea id = "name">myFile</textarea>
         <button onclick="create();">Create</button>
   </div>
   <div id = "iocharts">
-  <canvas id="inwave" width="900" height="100" style="border:1px solid #000000;"></canvas>
-      <canvas id="outwave" width="900" height="100" style="border:1px solid #000000;"></canvas>
+  <canvas id="inwave" width="800" height="175" style="border:1px solid #000000;"></canvas>
+      <canvas id="outwave" width="800" height="175" style="border:1px solid #000000;"></canvas>
     </div>
-<button id="input">
-Set input
-</button>
-<button id="settings">
-  <h5>Settings</h5>
-  </button>
 </div>
 <script src="Chartjs.js"></script>
-<script src="tensorflow.js"></script>
       <script src="script.js"></script>
 </body>
 
