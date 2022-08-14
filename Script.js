@@ -29,7 +29,7 @@ if(letStart){
   }
 const tempar = document.body.innerHTML;
 
-document.body.innerHTML = "<p style='background-color:gray;color:blue;text-align:center;font-size:90px;'>Streusel</p1><p style='background-color:gray;color:blue;text-align:center;font-size:20px;'>by paxon kymissis</p>"
+document.body.innerHTML = "<p style='background-color:gray;color:blue;text-align:center;font-size:90px;'>Shrek math</p1><p style='background-color:gray;color:blue;text-align:center;font-size:20px;'>by paxon kymissis</p>"
 await delay(1000)
 itr = 0;
 while(itr<2*Math.PI){
@@ -1140,7 +1140,6 @@ function settings0(){
   setTheme();
   })
 }
-console.log(document.getElementById('settings'))
 function fileinput(){
 global2 = (file2wave(input));
 console.log(global2)
@@ -1919,7 +1918,7 @@ const pickerOpts = {
     {
       description: 'Project file (stored as text)',
       accept: {
-        'Text/*': ['.txt']
+        'Text/*': ['.shrek']
       }
     },
   ],
@@ -1988,7 +1987,7 @@ async function save(savetype){
         {
           description: "Project file",
           accept: {
-            "text/plain": [".txt"],
+            "text/plain": [".shrek"],
           },
         },
       ],
