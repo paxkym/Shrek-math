@@ -1,5 +1,4 @@
 ## Notice:
-### A new version of Shrek Math is being made in java @[github.com/paxkym/Shrek-math--java-/](https://github.com/paxkym/Shrek-math--java-/). The older version is still usable, but of a lower quality due to its website-like design limitations, and lack of modularity.
 
 # Shrek math software instructions
 
