@@ -1,4 +1,3 @@
-## Notice:
 
 # Shrek math software instructions
 
